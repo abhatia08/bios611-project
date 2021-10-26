@@ -8,8 +8,9 @@ library(usmap)
 library(here)
 library(fs)
 library(janitor)
-library(tigris)
+library(tidycensus)
 library(labelled)
+options(tigris_use_cache = TRUE)
 
 # A. YELP DATA ----
 #
