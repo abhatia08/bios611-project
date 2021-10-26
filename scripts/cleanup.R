@@ -10,7 +10,6 @@ library(fs)
 library(janitor)
 library(tidycensus)
 library(labelled)
-options(tigris_use_cache = TRUE)
 
 # A. YELP DATA ----
 #
@@ -127,7 +126,6 @@ write_csv(yelp_tidy,
 
 utils::download.file(url = "https://www.cdc.gov/nchs/nvss/bridged_race/pcen_v2018_y18.txt.zip",
                      destfile = here::here(
-                       data_path,
                        "source_data",
                        basename(
                          "https://www.cdc.gov/nchs/nvss/bridged_race/pcen_v2018_y18.txt.zip"
@@ -137,7 +135,6 @@ utils::download.file(url = "https://www.cdc.gov/nchs/nvss/bridged_race/pcen_v201
 
 orig_pop_df <-
   readr::read_fwf(here::here(
-    data_path,
     "source_data",
     basename(
       "https://www.cdc.gov/nchs/nvss/bridged_race/pcen_v2018_y18.txt.zip"
@@ -212,13 +209,11 @@ readr::write_csv(non_white_perc,
 
 ## Imports ----
 
-RAW_SRC <- here::here(data_path,
-                      "source_data",
+RAW_SRC <- here::here("source_data",
                       "AHRF_2018-2019",
                       "DATA",
                       "AHRF2019.asc")
 DOC_SRC <- here::here(
-  data_path,
   "source_data",
   "AHRF_2018-2019",
   "DOC",
