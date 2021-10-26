@@ -6,17 +6,16 @@ library(here)
 
 # Import Datasets
 yelp_df <-
-  readr::read_csv(here::here(data_path, "derived_data", "yelp_tidy.csv"))
+  readr::read_csv(here::here("derived_data", "yelp_tidy.csv"))
 pop_df <-
-  readr::read_csv(here::here(data_path, "derived_data", "population_by_age.csv"))
+  readr::read_csv(here::here("derived_data", "population_by_age.csv"))
 
 
-nonwhite_df <- readr::read_csv(here::here(data_path,
-                                          "derived_data",
+nonwhite_df <- readr::read_csv(here::here("derived_data",
                                           "percent_nonwhite_pop.csv"))
 
 ahrf_df <-
-  read_csv(here::here(data_path, "derived_data",  "ahrf_subset.csv"))
+  read_csv(here::here("derived_data",  "ahrf_subset.csv"))
 
 ## Reshape population ----
 
