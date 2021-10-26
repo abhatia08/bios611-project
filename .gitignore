@@ -46,3 +46,4 @@ po/*~
 
 # data files
 source_data/yelp_academic_dataset_business.json
+derived_data/*
