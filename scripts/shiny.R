@@ -37,14 +37,6 @@ rm(
 
 ## Wrangle data ----
 
-### List of counties
-
-county_choice <-
-  paste(analytic_df$county,
-        analytic_df$state_abbr,
-        '-',
-        analytic_df$fips)
-
 ### Merge in shapefiles
 analytic_df <- rename (analytic_df, state_abbr = state)
 analytic_df$fips <- as.numeric(analytic_df$fips)
