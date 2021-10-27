@@ -1,9 +1,10 @@
-## Loard Libraries ----
+## Load Libraries ----
 
 library(patchwork)
 library(tidyverse)
 library(here)
 library(viridis)
+library(ggthemes)
 
 ## Patchwork Univariate county plots (Shiny) ----
 plot_counties <-
