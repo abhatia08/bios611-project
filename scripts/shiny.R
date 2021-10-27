@@ -38,7 +38,7 @@ rm(
 ## Wrangle data ----
 
 ### Merge in shapefiles
-analytic_df <- rename (analytic_df, state_abbr = state)
+analytic_df <- dplyr::rename (analytic_df, c("state_abbr" = "state"))
 analytic_df$fips <- as.numeric(analytic_df$fips)
 
 counties_sf <-
