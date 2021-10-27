@@ -14,7 +14,7 @@ library(viridis)
 # ## Run the cleanup and analysis scripts
 source(here::here("scripts", "cleanup.R"))
 source(here::here("scripts", "analysis.R"))
-source(here::here("scripts", "utils.R"))
+source(here::here("scripts", "util.R"))
 
 ## Remove unnecessary dfs
 rm(

@@ -2,7 +2,6 @@
 
 library(patchwork)
 library(tidyverse)
-library(here)
 library(viridis)
 library(ggthemes)
 
