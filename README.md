@@ -42,8 +42,7 @@ docker run \
     -it abhi08
 ```
 
-Once the Rstudio is running connect to it by visiting
-https://localhost:8787 in your browser, and enter `rstudio` as the username, and `password123` as the password. 
+Once the Rstudio is running connect to it by visiting localhost:8787 in your browser, and enter `rstudio` as the username, and `password123` as the password. 
 
 ---
 ## Shiny (Homework 10)
