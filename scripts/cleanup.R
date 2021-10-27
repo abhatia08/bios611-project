@@ -92,7 +92,7 @@ library(labelled)
 ## TEMPORARILY IMPORT YELP DATA ####
 ### Import tidied Yelp file
 yelp_geocoded <-
-  read_csv(here("source_data", "yelp_geocoded.csv"), lazy = FALSE)
+  read_csv(here::here("source_data", "yelp_geocoded.csv"), lazy = FALSE)
 
 ### County Level Business Aggregation
 yelp_tidy <-
@@ -113,6 +113,8 @@ yelp_tidy <- yelp_tidy[c("state",
                          "county",
                          "fips",
                          "n_business")]
+
+
 
 ### Write data to directory
 write_csv(yelp_tidy,
@@ -226,6 +228,8 @@ if (!fs::file_exists(RAW_SRC)) {
                exdir = here::here("source_data"))
 }
 
+
+
 ## Get the FWF layout ----
 bgn_line <- readxl::read_excel(DOC_SRC) %>%
   dplyr::pull(`...1`) %>%
@@ -300,7 +304,7 @@ ahrf_subset <- ahrf_county %>%
   dplyr::mutate_at(dplyr::vars(-dplyr::group_cols()), function(x)
     as.numeric(x)) %>%
   dplyr::ungroup() %>%
-  dplyr::mutate(p_poverty_level_2017 = (n_people_below_poverty_level_2017 /
+  dplyr::mutate(p_poverty_level_2017 = ((100 * n_people_below_poverty_level_2017) /
                                           n_pop_2017)) %>%
   dplyr::select(-fips_st,
                 -fips_ct,
