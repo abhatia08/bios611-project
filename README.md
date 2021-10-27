@@ -37,6 +37,7 @@ To start RStudio, enter the following command:
 ```
 docker run \
     -p 8787:8787 \
+    -p 8080:8080 \
     -e PASSWORD=password123 \
     -v "$(pwd)":/home/rstudio \
     -it abhi08
@@ -53,8 +54,8 @@ To explore preliminary county-level data in the dataset, start the R shiny app u
 
 ```
 docker run \
-    -p 8080:8080 \
     -p 8787:8787 \
+    -p 8080:8080 \
     -e PASSWORD=password123 \
     -v "$(pwd)":/home/rstudio \
     -it abhi08 sudo -H -u rstudio\
