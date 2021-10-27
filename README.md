@@ -68,7 +68,7 @@ docker run \
 ``` 
 cd scripts; Rscript shiny.R
 ```
-And it should be accessible on [localhost:8787](http://localhost:8787/) on your browser
+And it should be accessible on [localhost:8080](http://localhost:8080/) on your browser
 
 
 
