@@ -4,6 +4,7 @@
 library(tidyverse)
 library(here)
 
+source(here::here("scripts", "util.R"))
 # Import Datasets
 yelp_df <-
   readr::read_csv(here::here("derived_data", "yelp_tidy.csv"))
