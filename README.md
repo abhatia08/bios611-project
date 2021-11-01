@@ -70,6 +70,35 @@ cd scripts; Rscript shiny.R
 ```
 And it should be accessible on [localhost:8080](http://localhost:8080/) on your browser
 
+## Makefile
+
+To use the `Makefile` included in this repository to build components of the project, run the following code in the terminal within RStudio.
+
+* Clean all derived data and restart (initial step)
+```
+make clean
+```
+* Clean source data and produced derived datasets
+:construction: _Note: The current `cleanup.R` script is written to process all source data together. Subsequent versions may vary, allowing users to clean and produce individual datasets used in the analysis_ :construction:
+```
+make derived_data/yelp_tidy.csv
+
+make derived_data/ahrf_subset.csv
+
+make derived_data/percent_nonwhite_pop.csv
+
+make derived_data/population_by_age.csv
+```
+
+* Make the final report
+```
+make report.pdf
+```
+
+* Make the shiny visualization (current version from HW10)
+```
+make shiny
+```
 
 
 ---
