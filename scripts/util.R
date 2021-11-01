@@ -5,6 +5,13 @@ library(tidyverse)
 library(viridis)
 library(ggthemes)
 
+# Create directory if it doesn't exist
+ensure_directory <- function(directory){
+    if(!dir.exists(directory)){
+        dir.create(directory);
+    }
+}
+
 ## Patchwork Univariate county plots (Shiny) ----
 plot_counties <-
   function(plotting_df, fill_var) {
