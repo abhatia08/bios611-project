@@ -1,6 +1,17 @@
 FROM rocker/verse
 MAINTAINER Abhishek Bhatia <abhatia@unc.edu>
-RUN apt update && apt-get -y update && apt-get install -y  libudunits2-dev libgdal-dev libgeos-dev libproj-dev
+RUN apt update && apt install -y\
+    libudunits2-dev\
+    libgdal-dev\ 
+    libgeos-dev\
+    libproj-dev\
+    texlive-base\
+	texlive-binaries\
+    texlive-latex-base\
+	texlive-latex-recommended\
+	texlive-pictures\
+    texlive-latex-extra
+
 RUN R -e "install.packages(\"tinytex\")"
 RUN R -e "tinytex::install_tinytex()"
 RUN R -e "install.packages(\"tidyverse\")"
