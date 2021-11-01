@@ -1,4 +1,6 @@
-# Load required packages ----
+# SETUP ----
+
+## 1. Load required packages ----
 library(plyr)
 library(jsonlite)
 library(data.table)
@@ -11,9 +13,15 @@ library(janitor)
 library(tidycensus)
 library(labelled)
 
-# A. YELP DATA ----
+## 2. Run Util.R
+source(here::here("scripts", "util.R"))
+
+## 3. Create necessary directories
+ensure_directory("derived_data")
+
+# # A. YELP DATA ----
 #
-# # 1. Import data as tibble
+# ## 1. Import data as tibble ----
 #
 # yelp_data <- as_tibble(do.call(rbind, lapply(
 #   readLines(
@@ -22,7 +30,7 @@ library(labelled)
 #   fromJSON
 # )))
 #
-# # 2. Subset the data (exclude unnecessary variables)
+# ## 2. Subset the data (exclude unnecessary variables) ----
 # yelp_tidy <-
 #   yelp_data[c(
 #     "business_id",
@@ -36,7 +44,7 @@ library(labelled)
 #     "categories"
 #   )]
 #
-# # 3. Fix variable types
+# ## 3. Fix variable types ----
 #
 # yelp_tidy <- yelp_tidy %>%
 #   mutate(business_id = as.character(business_id)) %>%
@@ -50,7 +58,7 @@ library(labelled)
 #   mutate(longitude = as.numeric(longitude))
 #
 #
-# # 4. Subsetting out places that have related categories in it, and removing all BC sites
+# ## 4. Subsetting out places that have related categories in it, and removing all BC sites ----
 # yelp_tidy <-
 #   yelp_tidy %>%
 #   filter (
@@ -61,7 +69,7 @@ library(labelled)
 #   ) %>% filter(str_detect(state, "BC", negate = TRUE))
 #
 #
-# # 5. REVERSE GEOCODING-- only do once
+# ## 5. REVERSE GEOCODING-- only do once
 # yelp_tidy <- yelp_tidy %>%
 #   reverse_geocode(lat = latitude,
 #     long = longitude,
@@ -89,16 +97,16 @@ library(labelled)
 #
 # write_csv(yelp_tidy, "source_data/yelp_geocoded.csv")
 
-## TEMPORARILY IMPORT YELP DATA ####
-### Import tidied Yelp file
+#A2. TEMPORARILY IMPORT YELP DATA  ----
+## 1. Import tidied Yelp file ----
 yelp_geocoded <-
   read_csv(here::here("source_data", "yelp_geocoded.csv"), lazy = FALSE)
 
-### County Level Business Aggregation
+## 2. County Level Business Aggregation ----
 yelp_tidy <-
   yelp_geocoded %>% group_by(state, county) %>% tally() %>% dplyr::rename(n_business = n)
 
-### Import and join in FIPS codes
+## 3. Import and join in FIPS codes ----
 data(fips_codes)
 fips_codes$fips <-
   paste0(fips_codes$state_code, fips_codes$county_code)
@@ -116,15 +124,15 @@ yelp_tidy <- yelp_tidy[c("state",
 
 
 
-### Write data to directory
+## 4. Write data to directory ----
 write_csv(yelp_tidy,
           here::here("derived_data", "yelp_tidy.csv"))
 
-# 2. POPULATION DATA ----
+# B. POPULATION DATA ----
 ## Note that the code to clean and reshape this data is based on mkiang's repo:
 ## https://github.com/mkiang/county_preparedness/blob/master/code/01_get_population_data.R
 
-## Download and reshape the 2018 NCHS bridged race population file.
+## 1. Download the data ----
 
 utils::download.file(url = "https://www.cdc.gov/nchs/nvss/bridged_race/pcen_v2018_y18.txt.zip",
                      destfile = here::here(
@@ -134,7 +142,7 @@ utils::download.file(url = "https://www.cdc.gov/nchs/nvss/bridged_race/pcen_v201
                        )
                      ))
 
-
+## 2. Reshape the 2018 NCHS bridged race population file ----
 orig_pop_df <-
   readr::read_fwf(here::here(
     "source_data",
@@ -170,11 +178,11 @@ pop_df <- orig_pop_df %>%
   dplyr::summarize(pop = sum(pop)) %>%
   dplyr::ungroup()
 
-
+## 3. Write pop data to directory ----
 readr::write_csv(pop_df,
                  here::here("derived_data", "population_by_age.csv"))
 
-## Get percentage of non-NHW population ----
+## 4. Get percentage of non-NHW population ----
 nhw_df <- orig_pop_df %>%
   dplyr::select(age, fips, pop, racesex, hispanic) %>%
   dplyr::filter(racesex %in% 1:2, hispanic == 1) %>%
@@ -203,13 +211,13 @@ non_white_perc <- pop_df %>%
 readr::write_csv(non_white_perc,
                  here::here("derived_data", "percent_nonwhite_pop.csv"))
 
-#### 3. AHRF Data ####
+# C. AHRF DATA  ----
 ## Clean up AHRF files and extract the subset of columns we need.
 ##
 ## Note that this code is almost entirely from jjchern's great ahrf repo:
 ##  https://github.com/mkiang/ahrf/blob/master/data-raw/prep_county.R
 
-## Imports ----
+## 1. Imports ----
 
 RAW_SRC <- here::here("source_data",
                       "AHRF_2018-2019",
@@ -222,7 +230,7 @@ DOC_SRC <- here::here(
   "AHRF 2018-2019 Technical Documentation.xlsx"
 )
 
-## Check if file is unzipped ----
+## 2. Check if file is unzipped ----
 if (!fs::file_exists(RAW_SRC)) {
   utils::unzip(here::here("source_data", "AHRF_2018-2019.zip"),
                exdir = here::here("source_data"))
@@ -230,13 +238,13 @@ if (!fs::file_exists(RAW_SRC)) {
 
 
 
-## Get the FWF layout ----
+## 3. Get the FWF layout ----
 bgn_line <- readxl::read_excel(DOC_SRC) %>%
   dplyr::pull(`...1`) %>%
   grepl("F00001", .) %>%
   which()
 
-## Import the excel as a df of FWF info ----
+## 4. Import the excel as a df of FWF info ----
 ahrf_county_layout <- readxl::read_excel(
   DOC_SRC,
   col_names = c(
@@ -254,7 +262,7 @@ ahrf_county_layout <- readxl::read_excel(
   tidyr::separate(col_col, c("col_start", "col_end")) %>%
   dplyr::mutate_at(c("col_start", "col_end"), as.integer)
 
-## Import the county-level AHRF file ----
+## 5. Import the county-level AHRF file ----
 ahrf_county <- readr::read_fwf(
   file = RAW_SRC,
   col_positions = readr::fwf_positions(
@@ -269,12 +277,12 @@ labelled::var_label(ahrf_county) <- ahrf_county_layout %>%
   tibble::deframe() %>%
   as.list()
 
-## Extract scaling factor ----
+## 6. Extract scaling factor ----
 ahrf_county_layout <- ahrf_county_layout %>%
   dplyr::mutate(scaling_factor = stringr::str_extract(characteristics, "\\(.[0-1]{1,2}\\)")) %>%
   dplyr::mutate(scaling_factor = as.numeric(gsub("\\(|\\)", "", scaling_factor)))
 
-## Rescale columns ----
+## 7. Rescale columns ----
 for (s in unique(ahrf_county_layout$scaling_factor)) {
   if (!is.na(s)) {
     ahrf_county <- ahrf_county %>%
@@ -288,7 +296,7 @@ for (s in unique(ahrf_county_layout$scaling_factor)) {
   }
 }
 
-## Subset data to keep what we need
+## 8. Subset data to keep what we need
 ahrf_list <- c(
   "fips_st" = "F00011",
   "fips_ct" = "F00012",
@@ -316,6 +324,108 @@ ahrf_subset <- ahrf_county %>%
 
 
 
-## Save ----
+## 9. Save ----
 readr::write_csv(ahrf_subset,
                  here::here("derived_data", "ahrf_subset.csv"))
+
+
+
+# D. CDC ACCESS TO PARKS (API) DATA ----
+## NOTE- WORK IN PROGRESS
+# ## 1. Download the data ----
+# 
+# utils::download.file(url = "https://ephtracking.cdc.gov:443/apigateway/api/v1/getCoreHolder/428/2/all/all/2015/0/0",
+#                      destfile = here::here("bios611-project",
+#                        "source_data",
+#                        basename(
+#                          "https://ephtracking.cdc.gov:443/apigateway/api/v1/getCoreHolder/428/2/all/all/2015/0/0"
+#                        )
+#                      ))
+# 
+# ## 2. Reshape the 2018 NCHS bridged race population file ----
+# 
+# api_data <- as_tibble(do.call(rbind, lapply(
+#   readLines(
+#     "https://ephtracking.cdc.gov:443/apigateway/api/v1/getCoreHolder/428/2/all/all/2015/0/0"
+#   ),
+#   fromJSON
+# )))
+# 
+# api_data <- jsonlite::read_json(here::here("bios611-project",
+#                                            "source_data",
+#                                            "api_data.json"))
+# 
+# api_data <-
+#   as_tibble(purrr::flatten(
+#     jsonlite::fromJSON(here::here("bios611-project",
+#                                   "source_data",
+#                                   "0.json"))))
+# 
+# yelp_geocoded <-
+#   read_csv(here::here("source_data", "yelp_geocoded.csv"), lazy = FALSE)
+# # 2. Subset the data (exclude unnecessary variables)
+# yelp_tidy <-
+#   yelp_data[c(
+#     "business_id",
+#     "name",
+#     "address",
+#     "city",
+#     "state",
+#     "postal_code",
+#     "latitude",
+#     "longitude",
+#     "categories"
+#   )]
+# 
+# # 3. Fix variable types
+# 
+# yelp_tidy <- yelp_tidy %>%
+#   mutate(business_id = as.character(business_id)) %>%
+#   mutate(name = as.character(name)) %>%
+#   mutate(address = as.character(address)) %>%
+#   mutate(city = as.character(city)) %>%
+#   mutate(state = as.character(state)) %>%
+#   mutate(postal_code = as.character(postal_code)) %>%
+#   mutate(categories = as.character(categories)) %>%
+#   mutate(latitude = as.numeric(latitude)) %>%
+#   mutate(longitude = as.numeric(longitude))
+# 
+# 
+# # 4. Subsetting out places that have related categories in it, and removing all BC sites
+# yelp_tidy <-
+#   yelp_tidy %>%
+#   filter (
+#     str_detect(
+#       categories,
+#       "Outdoor Gear|Bicycles|Bike Shop|Bikes|Hunting & Fishing Supplies|Military Surplus|Ski & Snowboard Shops|Sporting Goods"
+#     )
+#   ) %>% filter(str_detect(state, "BC", negate = TRUE))
+# 
+# 
+# # 5. REVERSE GEOCODING-- only do once
+# yelp_tidy <- yelp_tidy %>%
+#   reverse_geocode(lat = latitude,
+#     long = longitude,
+#     method = 'osm',
+#     address = address_found,
+#     full_results = TRUE
+#   )
+# 
+# yelp_tidy <- yelp_coded %>% select(c(1,2,3,4,5,6,7,8,9,10,22,24))
+# yelp_tidy <- yelp_tidy[c(
+#   "business_id",
+#   "name",
+#   "address",
+#   "city...4",
+#   "county",
+#   "postcode",
+#   "state...5",
+#   "latitude",
+#   "longitude",
+#   "categories"
+#   )]
+# colnames(yelp_tidy)[4]<-("city")
+# colnames(yelp_tidy)[7]<-("state")
+# 
+# 
+# write_csv(yelp_tidy, "source_data/yelp_geocoded.csv")
