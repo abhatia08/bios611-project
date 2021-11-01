@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[margin=0.75in]{geometry}
+
+\begin{document}
+
+\title{US county-level variation in characteristics influencing participation in outdoor recreation}
+\author{Abhishek Bhatia}
+\date{BIOS 611 - Fall 2021}
+\maketitle
+
+
+\section{Background}
+
+
+The term ``Nature Gap'' sheds light on the racial and economic disparities in access to greenspace, unequal distribution of nature, and the unjust experience of people of color in the outdoors across the United States. Systematic practices such as economic segregation, redlining, forced migration, racial violence, and intimidation in the outdoors have been prevalent for decades, have perpetuated the racial divide. Contemporary examples during the pandemic of Christian Cooper ``Birding While Black'' in Central Park, and Ahmaud Arbery murdered while jogging down a boulevard in Georgia show the risk and difficulty endured by people of color while in outdoor spaces.
+
+Access to public open spaces provides communities with the opportunity to engage in physical activity and build community while incentivizing the conservation of biodiversity during the looming climate crisis. Factors typically influencing the use of these spaces include (but are not limited to) population demographics, proximity, and community recreational expenditure. For this analysis, we will use publicly available county-specific data to examine how these key factors influencing participation in outdoor recreation intersect with the proportion of the population that is people of color (i.e. not non-Hispanic white).
+
+\section{\textbf{Data Sources}}
+\subsection{Population demographics:}
+\begin{itemize}
+\item Population per square mile of landmass (Source: U.S. Census Bureau)
+\item Percentage of residents living under the federal poverty level (Source: U.S. Census Bureau)
+\item Percentage of population 70 years or older (Source: National Center for Health Statistics Bridged Race Population Estimates 2011)
+\item Proportion of population that is not non-Hispanic White as determined by American Community Survey data (Source: U.S. Census Bureau)
+\end{itemize}
+
+
+\subsection{ \textbf{Commercial recreation services (as a proxy for community recreation expenditure):}}
+\begin{itemize}
+\item Number of outdoor gear stores at the county-level (Source: Yelp Business Dataset including location data, attributes, and categories)
+\end{itemize}
+
+
+\subsection{\textbf{Access to Parks (Park proximity)}}
+\begin{itemize}
+\item Proportion of individuals that live within a half-mile of a park boundary at the county-level (Source: CDC National Environmental Public Health Tracking Network (NEPHTN) Access to Parks Indicator (API))
+\end{itemize}
+
+\section{\textbf{Statistical Analysis}}
+
+For this analysis, we will aggregate all measures to the county-level, and exclude non-residential (no population) census tracts, and those with other missing key indicators. Additionally, we will exclude Alaska and Hawaii from the analyses due to their unique landscapes introducing difficulty in comparing measures of spatial access to parks and green spaces to the continental USA. We will purposefully avoid weighting these factors relative to each other since there is no strong evidence to rigorously assign importance across categories. The analysis will include univariate maps to depict spatial heterogeneity across counties of the United States, as well as bivariate county-level maps to summarize relationships across categories. 
+\end{document}
