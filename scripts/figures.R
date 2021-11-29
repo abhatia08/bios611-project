@@ -48,9 +48,6 @@ plotting_df <- plotting_df %>%
   dplyr::rename ("abbrev" = "state.x", "name" = "state_name.x", "county" = "county.x")
 
 
-## Drop geometry to use usmap
-plotting_df <- plotting_df %>% sf::st_drop_geometry()
-
 
 # A. BIVARIATE PLOTS (Main) ----
 
