@@ -388,28 +388,125 @@ file.rename(here::here("source_data",
                        "api_raw.json"))
 
 
-api_data <- jsonlite::read_json(here::here("source_data",
+api_df <- jsonlite::read_json(here::here("source_data",
                                            "api_raw.json"))
 
 ## 2. Unnest, restructure and subset the data ----
 
-api_data <- as.data.frame(do.call(cbind, api_data))
+api_df <- as.data.frame(do.call(cbind, api_df))
 
-api_data <- api_data$tableResult
+api_df <- api_df$tableResult
 
-api_data <- as.data.frame(do.call(rbind, api_data))
+api_df <- as.data.frame(do.call(rbind, api_df))
 
-api_data <-
-  api_data[c("geoId",
+api_df <-
+  api_df[c("geoId",
              "dataValue")]
 
-api_data <-
-  api_data %>%
+api_df <-
+  api_df %>%
   mutate(dataValue = as.numeric(dataValue)) %>%
   mutate(geoId = as.character(geoId)) %>%
   dplyr::rename(fips = geoId) %>%
   dplyr::rename(api_index = dataValue)
 
 ## 3. Write data to directory ----
-readr::write_csv(api_data,
-                 here::here("derived_data", "api_tidy.csv"))
+readr::write_csv(api_df,
+                 here::here("derived_data", "api.csv"))
+
+
+# F. JOIN DATA ----
+## 1. Using Yelp data as the starting point
+
+analytic_data <- yelp_tidy
+
+## 2. Join Population data ----
+
+pop_wide <- pop_df %>%
+  tidyr::spread(age, pop, sep = "")
+
+analytic_df <- analytic_df %>% dplyr::left_join(pop_wide)
+
+
+analytic_df <- analytic_df %>%
+  dplyr::mutate(
+    n_pop_2018 = age0 + age5 + age10 + age15 + age20 +
+      age25 + age30 + age35 + age40 + age45 + age50 +
+      age55 + age60 + age65 + age70 + age75 + age80 +
+      age85
+  ) %>% dplyr::mutate(p65older = ((age65 + age70 + age75 + age80 +
+                                     age85) * 100 / n_pop_2018))
+
+## 3. Non-white population data ----
+
+analytic_df <- analytic_df %>%
+  dplyr::left_join(nonwhite_df)
+
+## 4. Join AHRF data ----
+
+analytic_df <- analytic_df %>%
+  dplyr::left_join(ahrf_df) %>%
+  dplyr::mutate(p_business_pop10000 = ((n_business * 10000) / n_pop_2018))
+
+## 5. API data ----
+
+analytic_df <- analytic_df %>%
+  dplyr::left_join(api_df)
+
+## 6. GINI coef ----
+
+analytic_df <- analytic_df %>% 
+  dplyr::left_join(gini_df)
+
+
+# B. SUBSET THE DATA ----
+
+
+analytic_df <- analytic_df %>% select(
+  -c(
+    name,
+    age0,
+    age5,
+    age10,
+    age15,
+    age20,
+    age25,
+    age30,
+    age35,
+    age40,
+    age45,
+    age50,
+    age55,
+    age60,
+    age65,
+    age70,
+    age75,
+    age80,
+    age85
+  )
+)
+
+## 3. Remove unnecessary dfs ----
+rm(
+  ahrf_county,
+  ahrf_county_layout,
+  ahrf_df,
+  ahrf_subset,
+  api_df,
+  fips_codes,
+  gini_df,
+  nhw_df,
+  non_white_perc,
+  nonwhite_df,
+  orig_pop_df,
+  pop_df,
+  pop_wide,
+  yelp_df,
+  yelp_geocoded,
+  yelp_tidy
+)
+
+# C. WRITE DATA TO DIRECTORY ----
+
+readr::write_csv(analytic_df,
+                 here::here("derived_data", "analytic_data.csv"))
