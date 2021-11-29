@@ -151,7 +151,7 @@ write_csv(yelp_tidy,
 ## 1. Download the data ----
 
 utils::download.file(url = "https://www.cdc.gov/nchs/nvss/bridged_race/pcen_v2018_y18.txt.zip",
-                     destfile = here::here(
+                     destfile = here::here("bios611-project",
                        "source_data",
                        basename(
                          "https://www.cdc.gov/nchs/nvss/bridged_race/pcen_v2018_y18.txt.zip"
@@ -160,7 +160,7 @@ utils::download.file(url = "https://www.cdc.gov/nchs/nvss/bridged_race/pcen_v201
 
 ## 2. Reshape the 2018 NCHS bridged race population file ----
 orig_pop_df <-
-  readr::read_fwf(here::here(
+  readr::read_fwf(here::here("bios611-project",
     "source_data",
     basename(
       "https://www.cdc.gov/nchs/nvss/bridged_race/pcen_v2018_y18.txt.zip"
@@ -224,6 +224,7 @@ non_white_perc <- pop_df %>%
     p_white = nhw_pop / pop * 100
   )
 ## 5. Write data to directory ----
+
 readr::write_csv(
   non_white_perc,
   here::here(
@@ -244,7 +245,7 @@ RAW_SRC <- here::here("bios611-project",
                       "AHRF_2018-2019",
                       "DATA",
                       "AHRF2019.asc")
-DOC_SRC <- here::here(
+DOC_SRC <- here::here("bios611-project",
   "source_data",
   "AHRF_2018-2019",
   "DOC",
@@ -255,7 +256,7 @@ DOC_SRC <- here::here(
 if (!fs::file_exists(RAW_SRC)) {
   utils::unzip(
     here::here("bios611-project", "source_data", "AHRF_2018-2019.zip"),
-    exdir = here::here("source_data")
+    exdir = here::here("bios611-project","source_data")
   )
 }
 
@@ -352,8 +353,6 @@ readr::write_csv(ahrf_subset,
                  here::here("bios611-project", "derived_data", "ahrf_subset.csv"))
 
 
-
-
 # D. CDC ACCESS TO PARKS (API) DATA ----
 ## 1. Download and read in the data ----
 
@@ -396,7 +395,11 @@ api_data <-
              "dataValue")]
 
 api_data <-
-  api_data %>% mutate(dataValue = as.numeric(dataValue)) %>% dplyr::rename(fips = geoId) %>% dplyr::rename(api_index = dataValue)
+  api_data %>% 
+  mutate(dataValue = as.numeric(dataValue)) %>% 
+  mutate(geoId = as.character(geoId)) %>% 
+  dplyr::rename(fips = geoId) %>% 
+  dplyr::rename(api_index = dataValue)
 
 ## 3. Write data to directory ----
 readr::write_csv(api_data,
