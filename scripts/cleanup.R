@@ -326,8 +326,8 @@ ahrf_subset <- ahrf_county %>%
   dplyr::mutate_at(dplyr::vars(-dplyr::group_cols()), function(x)
     as.numeric(x)) %>%
   dplyr::ungroup() %>%
-  dplyr::mutate(p_poverty_level_2017 = ((100 * n_people_below_poverty_level_2017) /
-                                          n_pop_2017)) %>%
+  dplyr::mutate(p_poverty = ((100 * n_people_below_poverty_level_2017) /
+                               n_pop_2017)) %>%
   dplyr::select(-fips_st,
                 -fips_ct,
                 -n_people_below_poverty_level_2017,
@@ -392,7 +392,7 @@ file.rename(here::here("source_data",
 
 
 api_df <- jsonlite::read_json(here::here("source_data",
-                                           "api_raw.json"))
+                                         "api_raw.json"))
 
 ## 2. Unnest, restructure and subset the data ----
 
@@ -404,7 +404,7 @@ api_df <- as.data.frame(do.call(rbind, api_df))
 
 api_df <-
   api_df[c("geoId",
-             "dataValue")]
+           "dataValue")]
 
 api_df <-
   api_df %>%
@@ -449,7 +449,7 @@ analytic_df <- analytic_df %>%
 
 analytic_df <- analytic_df %>%
   dplyr::left_join(ahrf_subset) %>%
-  dplyr::mutate(p_business_pop10000 = ((n_business * 10000) / n_pop_2018))
+  dplyr::mutate(p_business_permil = ((n_business * 1000000) / n_pop_2018))
 
 ## 5. API data ----
 
@@ -458,7 +458,7 @@ analytic_df <- analytic_df %>%
 
 ## 6. GINI coef ----
 
-analytic_df <- analytic_df %>% 
+analytic_df <- analytic_df %>%
   dplyr::left_join(gini_df)
 
 
@@ -486,7 +486,6 @@ analytic_df <- analytic_df %>% select(
     age80,
     age85,
     p_white,
-    n_pop_2018
   )
 )
 
