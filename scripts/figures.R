@@ -21,31 +21,33 @@ analytic_df <-
 
 ## 4. Prep base map layer and plotting df ----
 
-analytic_df <-
-  dplyr::rename (analytic_df, c("state_abbr" = "state"))
-
 ## County level data (for completeness/future-proof)
-counties_df <-
-  sf::st_as_sf(maps::map("county", plot = FALSE, fill = TRUE),
-               crs = 4326) %>%
-  mutate(ID = as.character(ID)) %>%
-  left_join(maps::county.fips, c(ID = "polyname"))
 
-## Fips is int here, and I have a preference for leading zeros being included
-## convert to char and add zeros for the 285 counties that need it
-counties_df <- counties_df %>%
-  mutate(fips = as.character(fips))
+data(fips_codes)
+fips_codes$fips <-
+  paste0(fips_codes$state_code, fips_codes$county_code)
 
-counties_df$fips[1:285] <- paste0('0', counties_df$fips[1:285])
-
-## Create a df with geometry and data
-
-plotting_df <- left_join(counties_df, analytic_df, "fips")
 plotting_df <-
-  plotting_df %>% separate(ID, c('state', 'county'), sep = ',')
+  left_join(fips_codes,
+            analytic_df,
+            by = c("fips" = "fips"))
+
+plotting_df <- plotting_df[c("state.x",
+                         "state_name.x",
+                         "county.x",
+                         "fips",
+                         "p65older",
+                         "p_nonwhite",
+                         "p_poverty",
+                         "p_business_permil",
+                         "api_index",
+                         "gini_coef"
+                         )]
+
+
 
 plotting_df <- plotting_df %>%
-  dplyr::rename ("abbrev" = "state_abbr", "name" = "state")
+  dplyr::rename ("abbrev" = "state.x", "name" = "state_name.x", "county" = "county.x")
 
 
 ## Appending state abbreviations
@@ -62,3 +64,5 @@ plotting_df <- plotting_df[-c(5)]
 
 ## Drop geometry to use usmap
 plotting_df <- plotting_df %>% sf::st_drop_geometry()
+
+
