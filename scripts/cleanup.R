@@ -484,7 +484,9 @@ analytic_df <- analytic_df %>% select(
     age70,
     age75,
     age80,
-    age85
+    age85,
+    p_white,
+    n_pop_2018
   )
 )
 
