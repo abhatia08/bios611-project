@@ -44,23 +44,9 @@ plotting_df <- plotting_df[c("state.x",
                          "gini_coef"
                          )]
 
-
-
 plotting_df <- plotting_df %>%
   dplyr::rename ("abbrev" = "state.x", "name" = "state_name.x", "county" = "county.x")
 
-
-## Appending state abbreviations
-plotting_df$state_name <- stringr::str_to_title(plotting_df$name)
-
-plotting_df$abbrev <- state.abb[match(plotting_df$state_name, state.name)]
-
-## DC does not match automatically
-plotting_df$abbrev[plotting_df$name == "district of columbia"] <-
-  "DC"
-
-## Drop duplicate state name
-plotting_df <- plotting_df[-c(5)]
 
 ## Drop geometry to use usmap
 plotting_df <- plotting_df %>% sf::st_drop_geometry()
@@ -250,4 +236,146 @@ ggplot2::ggsave(
   height = 4,
   scale = 1.1
 )
+
+# # B. UNIVARIATE PLOTS ----
+# 
+# # # Shiny Notes
+# # 
+# #     "US county-level variation in characteristics influencing participation in outdoor recreation"
+# #   ),
+# #   theme = shinytheme("slate"),
+# #   selectInput(
+# #     "characteristic",
+# #     label = "Characteristic",
+# #     choices = c(
+# #       "% population over 65" = "p65older",
+# #       "% households under the poverty line" = "p_poverty",
+# #       "% population non-Hispanic and non-White" = "p_nonwhite",
+# #       "number of outdoor recreation retail businesses per 1 million individuals" = "p_business_permil",
+# #       "population in 2018" = "n_pop_2018"
+# 
+# ## 1. p_65_older ----
+# 
+# 
+# p1 <- plot_counties(plotting_df, "p65older") +
+#   ggplot2::scale_fill_viridis_c(
+#     "Percent of population over 65",
+#     trans = "log1p",
+#     direction = -1,
+#     guide = ggplot2::guide_colorbar(
+#       title.position = "top",
+#       barheight = ggplot2::unit(.5, "cm"),
+#       barwidth = ggplot2::unit(12.5, "cm")
+#     )
+#   )  +
+#   ggplot2::theme(legend.position = "bottom")
+# ggplot2::ggsave(
+#   here::here("figures", "figS01_p_65yo.pdf"),
+#   p1,
+#   device = grDevices::cairo_pdf,
+#   width = 7,
+#   height = 6,
+#   scale = 1.1
+# )
+# ggplot2::ggsave(
+#   here::here("figures", "figS01_p_65yo.jpg"),
+#   p1,
+#   dpi = 300,
+#   width = 7,
+#   height = 6,
+#   scale = 1.1
+# )
+# 
+# 
+# ## 2. Percentage of households living in poverty, 2016 ----
+# p1 <- plot_counties(plotting_df, "p_poverty") +
+#   ggplot2::scale_fill_viridis_c(
+#     "Percent of population below poverty level",
+#     trans = "log1p",
+#     direction = -1,
+#     guide = ggplot2::guide_colorbar(
+#       title.position = "top",
+#       barheight = ggplot2::unit(.5, "cm"),
+#       barwidth = ggplot2::unit(12.5, "cm")
+#     )
+#   )  +
+#   ggplot2::theme(legend.position = "bottom")
+# ggplot2::ggsave(
+#   here::here("figures", "figS02_poverty.pdf"),
+#   p1,
+#   device = grDevices::cairo_pdf,
+#   width = 7,
+#   height = 6,
+#   scale = 1.1
+# )
+# ggplot2::ggsave(
+#   here::here("figures", "figS02_poverty.jpg"),
+#   p1,
+#   dpi = 300,
+#   width = 7,
+#   height = 6,
+#   scale = 1.1
+# )
+# 
+# ## 3. Percentage of population non-Hispanic and non-White ----
+# p1 <- plot_counties(plotting_df, "p_nonwhite") +
+#   ggplot2::scale_fill_viridis_c(
+#     "Percent of population non-Hispanic and non-White",
+#     direction = -1,
+#     # trans = "log1p",
+#     guide = ggplot2::guide_colorbar(
+#       title.position = "top",
+#       barheight = ggplot2::unit(.5, "cm"),
+#       barwidth = ggplot2::unit(12.5, "cm")
+#     )
+#   )  +
+#   ggplot2::theme(legend.position = "bottom")
+# ggplot2::ggsave(
+#   here::here("figures", "figS04_p_nonwhite_nonhispanic.pdf"),
+#   p1,
+#   device = grDevices::cairo_pdf,
+#   width = 7,
+#   height = 6,
+#   scale = 1.1
+# )
+# ggplot2::ggsave(
+#   here::here("figures", "figS04_p_nonwhite_nonhispanic.jpg"),
+#   p1,
+#   dpi = 300,
+#   width = 7,
+#   height = 6,
+#   scale = 1.1
+# )
+# 
+# ## 4. Population (log 10), 2018 ----
+# p1 <- plot_counties(plotting_df, "n_pop_2018") +
+#   ggplot2::scale_fill_viridis_c(
+#     "Population (log10)",
+#     trans = "log10",
+#     direction = 1,
+#     guide = ggplot2::guide_colorbar(
+#       title.position = "top",
+#       barheight = ggplot2::unit(.5, "cm"),
+#       barwidth = ggplot2::unit(12.5, "cm")
+#     ),
+#     breaks = 10 ^ (2:7),
+#     labels = c("100", "1,000", "10,000", "100,000", "1,000,000", "10,000,000")
+#   )  +
+#   ggplot2::theme(legend.position = "bottom")
+# ggplot2::ggsave(
+#   here::here("figures", "figS17_population.pdf"),
+#   p1,
+#   device = grDevices::cairo_pdf,
+#   width = 7,
+#   height = 6,
+#   scale = 1.1
+# )
+# ggplot2::ggsave(
+#   here::here("figures", "figS17_population.jpg"),
+#   p1,
+#   dpi = 300,
+#   width = 7,
+#   height = 6,
+#   scale = 1.1
+# )
 
