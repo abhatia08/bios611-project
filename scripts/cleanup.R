@@ -464,8 +464,10 @@ analytic_df <- analytic_df %>%
 
 # B. SUBSET THE DATA ----
 
+
 analytic_df <- analytic_df %>% select(
   -c(
+    name,
     age0,
     age5,
     age10,

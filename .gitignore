@@ -47,18 +47,3 @@ po/*~
 # data files
 source_data/yelp_academic_dataset_business.json
 derived_data/*
-source_data/api_raw.json
-report.log
-report.aux
-source_data/pcen_v2018_y18.txt.zip
-
-
-# local and config files
-.local/*
-.config/*
-.texlive2019/*
-
-# bash history
-.bash_history
-
-
