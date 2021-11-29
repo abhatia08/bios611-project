@@ -14,10 +14,10 @@ library(tidycensus)
 library(labelled)
 
 ## 2. Run Util.R ----
-source(here::here("bios611-project", "scripts", "util.R"))
+source(here::here("scripts", "util.R"))
 
 ## 3. Create necessary directories ----
-ensure_directory(here::here("bios611-project", "derived_data"))
+ensure_directory(here::here("derived_data"))
 
 # A. YELP DATA ----
 
@@ -25,19 +25,16 @@ ensure_directory(here::here("bios611-project", "derived_data"))
 ## If data has already been geocoded, load the geocoded file. ----
 ## Note: Geocoding is a resource intensive process, and a geocoded dataset was provided to allow repeated runs
 
-if (file.exists(here::here("bios611-project", "source_data", "yelp_geocoded.csv"))) {
+if (file.exists(here::here("source_data", "yelp_geocoded.csv"))) {
   yelp_geocoded <-
-    read_csv(here::here("bios611-project", "source_data", "yelp_geocoded.csv"),
+    read_csv(here::here("source_data", "yelp_geocoded.csv"),
              lazy = FALSE)
 } else {
   ## 1. Import data as tibble ----
   
   yelp_data <- as_tibble(do.call(rbind, lapply(readLines(
-    here::here(
-      "bios611-project",
-      "source_data",
-      "yelp_academic_dataset_business.json"
-    )
+    here::here("source_data",
+               "yelp_academic_dataset_business.json")
   ),
   fromJSON)))
   
@@ -110,10 +107,8 @@ if (file.exists(here::here("bios611-project", "source_data", "yelp_geocoded.csv"
   colnames(yelp_geocoded)[7] <- ("state")
   
   ## 6. Write geocoded data to directory ----
-  write_csv(
-    yelp_geocoded,
-    here::here("bios611-project", "derived_data", "yelp_geocoded.csv")
-  )
+  write_csv(yelp_geocoded,
+            here::here("derived_data", "yelp_geocoded.csv"))
   
 }
 
@@ -142,7 +137,7 @@ yelp_tidy <- yelp_tidy[c("state",
 
 ## 9. Write tidy data to directory ----
 write_csv(yelp_tidy,
-          here::here("bios611-project", "derived_data", "yelp_tidy.csv"))
+          here::here("derived_data", "yelp_tidy.csv"))
 
 # B. POPULATION DATA ----
 ## Note that the code to clean and reshape this data is based on mkiang's repo:
@@ -151,7 +146,7 @@ write_csv(yelp_tidy,
 ## 1. Download the data ----
 
 utils::download.file(url = "https://www.cdc.gov/nchs/nvss/bridged_race/pcen_v2018_y18.txt.zip",
-                     destfile = here::here("bios611-project",
+                     destfile = here::here(
                        "source_data",
                        basename(
                          "https://www.cdc.gov/nchs/nvss/bridged_race/pcen_v2018_y18.txt.zip"
@@ -160,7 +155,7 @@ utils::download.file(url = "https://www.cdc.gov/nchs/nvss/bridged_race/pcen_v201
 
 ## 2. Reshape the 2018 NCHS bridged race population file ----
 orig_pop_df <-
-  readr::read_fwf(here::here("bios611-project",
+  readr::read_fwf(here::here(
     "source_data",
     basename(
       "https://www.cdc.gov/nchs/nvss/bridged_race/pcen_v2018_y18.txt.zip"
@@ -196,7 +191,7 @@ pop_df <- orig_pop_df %>%
 
 ## 3. Write population data to directory ----
 readr::write_csv(pop_df,
-                 here::here("bios611-project", "derived_data", "population_by_age.csv"))
+                 here::here("derived_data", "population_by_age.csv"))
 
 ## 4. Get percentage of non-NHW population ----
 nhw_df <- orig_pop_df %>%
@@ -225,27 +220,21 @@ non_white_perc <- pop_df %>%
   )
 ## 5. Write data to directory ----
 
-readr::write_csv(
-  non_white_perc,
-  here::here(
-    "bios611-project",
-    "derived_data",
-    "percent_nonwhite_pop.csv"
-  )
-)
+readr::write_csv(non_white_perc,
+                 here::here("derived_data",
+                            "percent_nonwhite_pop.csv"))
 
 # C. AHRF DATA  ----
-## Note that this code is almost entirely from jjchern's great ahrf repo:
+## Note that this code is almost entirely from jjchern's ahrf repo:
 ##  https://github.com/mkiang/ahrf/blob/master/data-raw/prep_county.R
 
 ## 1. Import sources ----
 
-RAW_SRC <- here::here("bios611-project",
-                      "source_data",
+RAW_SRC <- here::here("source_data",
                       "AHRF_2018-2019",
                       "DATA",
                       "AHRF2019.asc")
-DOC_SRC <- here::here("bios611-project",
+DOC_SRC <- here::here(
   "source_data",
   "AHRF_2018-2019",
   "DOC",
@@ -254,10 +243,8 @@ DOC_SRC <- here::here("bios611-project",
 
 ## 2. Check if file is unzipped ----
 if (!fs::file_exists(RAW_SRC)) {
-  utils::unzip(
-    here::here("bios611-project", "source_data", "AHRF_2018-2019.zip"),
-    exdir = here::here("bios611-project","source_data")
-  )
+  utils::unzip(here::here("source_data", "AHRF_2018-2019.zip"),
+               exdir = here::here("source_data"))
 }
 
 
@@ -350,36 +337,58 @@ ahrf_subset <- ahrf_county %>%
 
 ## 9. Write data to directory ----
 readr::write_csv(ahrf_subset,
-                 here::here("bios611-project", "derived_data", "ahrf_subset.csv"))
+                 here::here("derived_data", "ahrf_subset.csv"))
 
+# D. ACS GINI COEFFICIENT DATA ----
 
-# D. CDC ACCESS TO PARKS (API) DATA ----
-## 1. Download and read in the data ----
+## 1. Import data ----
 
-utils::download.file(
-  url = "https://ephtracking.cdc.gov:443/apigateway/api/v1/getCoreHolder/428/2/all/all/2015/0/0",
-  destfile = here::here(
-    "bios611-project",
+gini_df <- readr::read_csv(
+  here::here(
     "source_data",
-    basename(
-      "https://ephtracking.cdc.gov:443/apigateway/api/v1/getCoreHolder/428/2/all/all/2015/0/0"
-    )
+    "ACSDT5Y2018.B19083_2020-03-20T172559",
+    "ACSDT5Y2018.B19083_data_with_overlays_2020-03-20T172555.csv"
   )
 )
 
+## 2. Clean to only keep fips and numeric coefficient----
+gini_df <- gini_df %>%
+  dplyr::slice(-1) %>%
+  dplyr::select(geoid = GEO_ID,
+                gini_coef = B19083_001E) %>%
+  dplyr::mutate(fips = substr(geoid, nchar(geoid) - 4, nchar(geoid))) %>%
+  dplyr::select(-geoid) %>%
+  dplyr::filter(gini_coef != "null",
+                fips != "000US") %>%
+  dplyr::mutate(gini_coef = as.numeric(gini_coef))
 
-file.rename(
-  here::here("bios611-project",
-             "source_data",
-             "0"),
-  here::here("bios611-project",
-             "source_data",
-             "api_raw.json")
-)
+## 3. Write data to directory ----
+
+readr::write_csv(gini_df,
+                 here::here("derived_data",
+                            "gini.csv"))
 
 
-api_data <- jsonlite::read_json(here::here("bios611-project",
-                                           "source_data",
+
+# E. CDC ACCESS TO PARKS (API) DATA ----
+## 1. Download and read in the data ----
+
+utils::download.file(url = "https://ephtracking.cdc.gov:443/apigateway/api/v1/getCoreHolder/428/2/all/all/2015/0/0",
+                     destfile = here::here(
+                       "source_data",
+                       basename(
+                         "https://ephtracking.cdc.gov:443/apigateway/api/v1/getCoreHolder/428/2/all/all/2015/0/0"
+                       )
+                     ))
+
+
+file.rename(here::here("source_data",
+                       "0"),
+            here::here("source_data",
+                       "api_raw.json"))
+
+
+api_data <- jsonlite::read_json(here::here("source_data",
                                            "api_raw.json"))
 
 ## 2. Unnest, restructure and subset the data ----
@@ -395,12 +404,12 @@ api_data <-
              "dataValue")]
 
 api_data <-
-  api_data %>% 
-  mutate(dataValue = as.numeric(dataValue)) %>% 
-  mutate(geoId = as.character(geoId)) %>% 
-  dplyr::rename(fips = geoId) %>% 
+  api_data %>%
+  mutate(dataValue = as.numeric(dataValue)) %>%
+  mutate(geoId = as.character(geoId)) %>%
+  dplyr::rename(fips = geoId) %>%
   dplyr::rename(api_index = dataValue)
 
 ## 3. Write data to directory ----
 readr::write_csv(api_data,
-                 here::here("bios611-project", "derived_data", "api_tidy.csv"))
+                 here::here("derived_data", "api_tidy.csv"))
