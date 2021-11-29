@@ -9,6 +9,8 @@ clean:
 	rm -f report.pdf
 	rm -f source_data/pcen_v2018_y18.txt.zip
 	rm -f source_data/api_raw.json
+	rm -rf source_data/AHRF_2018-2019
+	rm -rf source_data/__MACOSX
 
 # Final report for the Project
 report.pdf: report.tex
