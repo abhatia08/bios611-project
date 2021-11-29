@@ -5,7 +5,7 @@ SHELL: /bin/bash
 # Clean action to remove previously existing processed products
 clean:
 	rm -rf derived_data
-	rm -f figures/*
+	rm -rf figures
 	rm -f report.pdf
 	rm -f source_data/pcen_v2018_y18.txt.zip
 	rm -f source_data/api_raw.json
