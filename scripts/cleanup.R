@@ -211,7 +211,7 @@ nhw_df <- orig_pop_df %>%
   dplyr::summarize(nhw_pop = sum(pop)) %>%
   dplyr::ungroup()
 
-non_white_perc <- pop_df %>%
+nonwhite_df <- pop_df %>%
   dplyr::left_join(nhw_df) %>%
   dplyr::group_by(fips) %>%
   dplyr::summarize(pop = sum(pop),
@@ -223,7 +223,7 @@ non_white_perc <- pop_df %>%
   )
 ## 5. Write data to directory ----
 
-readr::write_csv(non_white_perc,
+readr::write_csv(nonwhite_df,
                  here::here("derived_data",
                             "percent_nonwhite_pop.csv"))
 
@@ -448,7 +448,7 @@ analytic_df <- analytic_df %>%
 ## 4. Join AHRF data ----
 
 analytic_df <- analytic_df %>%
-  dplyr::left_join(ahrf_df) %>%
+  dplyr::left_join(ahrf_subset) %>%
   dplyr::mutate(p_business_pop10000 = ((n_business * 10000) / n_pop_2018))
 
 ## 5. API data ----
@@ -464,9 +464,9 @@ analytic_df <- analytic_df %>%
 
 # B. SUBSET THE DATA ----
 
-
 analytic_df <- analytic_df %>% select(
   -c(
+    name,
     age0,
     age5,
     age10,
@@ -486,26 +486,6 @@ analytic_df <- analytic_df %>% select(
     age80,
     age85
   )
-)
-
-## 3. Remove unnecessary dfs ----
-rm(
-  ahrf_county,
-  ahrf_county_layout,
-  ahrf_df,
-  ahrf_subset,
-  api_df,
-  fips_codes,
-  gini_df,
-  nhw_df,
-  non_white_perc,
-  nonwhite_df,
-  orig_pop_df,
-  pop_df,
-  pop_wide,
-  yelp_df,
-  yelp_geocoded,
-  yelp_tidy
 )
 
 # C. WRITE DATA TO DIRECTORY ----
