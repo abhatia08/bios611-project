@@ -467,7 +467,6 @@ analytic_df <- analytic_df %>%
 
 analytic_df <- analytic_df %>% select(
   -c(
-    name,
     age0,
     age5,
     age10,
