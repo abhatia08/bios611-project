@@ -13,6 +13,9 @@ library(janitor)
 library(tidycensus)
 library(labelled)
 
+## 2. Declare `here`
+here::i_am("scripts/cleanup.R")
+
 ## 2. Run Util.R ----
 source(here::here("scripts", "util.R"))
 
@@ -418,7 +421,7 @@ readr::write_csv(api_df,
 # F. JOIN DATA ----
 ## 1. Using Yelp data as the starting point
 
-analytic_data <- yelp_tidy
+analytic_df <- yelp_tidy
 
 ## 2. Join Population data ----
 
