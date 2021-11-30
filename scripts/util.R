@@ -216,16 +216,6 @@ return_rounded_iqr <- function(x) {
   round(quantile(x, c(.25, .75), na.rm = TRUE, names = FALSE))
 }
 
-return_gini_iqr <- function(x) {
-  round(quantile(
-    x,
-    c(.25, .75),
-    digits = 2,
-    na.rm = TRUE,
-    names = FALSE
-  ))
-}
-
 mega_plot_bivariate <-
   function(plotting_df,
            x_var,
@@ -326,110 +316,6 @@ mega_plot_bivariate <-
       p3
     }
   }
-
-# Special version for GINI
-
-mega_gini_bivariate <-
-  function(plotting_df,
-           x_var,
-           x_high,
-           x_low,
-           x_label,
-           rev_x = FALSE,
-           y_var,
-           y_high,
-           y_low,
-           y_label,
-           rev_y = FALSE,
-           return_data = FALSE,
-           use_layout = FALSE,
-           as_strings = FALSE) {
-    ## We need to recast as symbols because Shiny keeps them as chars
-    if (as_strings) {
-      x_var <- rlang::sym(x_var)
-    }
-    if (as_strings) {
-      y_var <- rlang::sym(y_var)
-    }
-    
-    x_labels <- c(
-      sprintf("Low: <%i", round(x_low)),
-      sprintf("Moderate: %i-%i", round(x_low), round(x_high)),
-      sprintf("High: >%i", round(x_high))
-    )
-    y_labels <- c(
-      sprintf("High: <%1.3f", y_high),
-      sprintf("Moderate: %1.3f-%1.3f", y_high, y_low),
-      sprintf("Low: >%1.3f", y_low)
-    )
-    
-    if (rev_x) {
-      x_labels <- rev(x_labels)
-    }
-    if (rev_y) {
-      y_labels <- rev(y_labels)
-    }
-    
-    p1 <- gen_hotspots_legend(rev_x = rev_x, rev_y = rev_y) +
-      ggplot2::scale_x_discrete(x_label,
-                                expand = c(0.05, 0),
-                                labels = x_labels) +
-      ggplot2::scale_y_discrete(y_label,
-                                expand = c(0.05, 0),
-                                labels = y_labels) +
-      theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
-    
-    discrete_df <- create_bivariate_df(plotting_df,
-                                       {
-                                         {
-                                           x_var
-                                         }
-                                       },
-                                       x_high,
-                                       x_low,
-                                       {
-                                         {
-                                           y_var
-                                         }
-                                       },
-                                       y_high,
-                                       y_low,
-                                       rev_x = rev_x,
-                                       rev_y = rev_y)
-    
-    p2 <- plot_bivariate(discrete_df)
-    
-    if (use_layout) {
-      layout <- "
-            ##BBBBBB
-            ##BBBBBB
-            AABBBBBB
-            ##BBBBBB
-            ##BBBBBB
-        "
-      p3 <- p1 + p2 + patchwork::plot_layout(design = layout)
-    } else {
-      p3 <- p1 + p2 + patchwork::plot_layout(widths = c(3, 10), ncol = 2)
-    }
-    
-    if (return_data) {
-      x <- list(
-        counts = discrete_df %>%
-          dplyr::group_by_at(dplyr::vars(dplyr::one_of(
-            names(discrete_df)[4:8]
-          ))) %>%
-          dplyr::count(),
-        data = discrete_df,
-        plot = p3,
-        map_only = p2,
-        legend_only = p1
-      )
-      x
-    } else {
-      p3
-    }
-  }
-
 
 
 # MKIANG'S NYTIMES AESTHETIC ----
