@@ -55,14 +55,14 @@ figures/fig_univariate_all.png: derived_data/plotting_data.csv scripts/util.R
 
 # Note: this will create all bivariate plots to stitch together into a final figure
 figures/fig_bivariate_retail.pdf: derived_data/plotting_data.csv scripts/util.R
-		Rscript scripts/07_fig_univariate.R 
+		Rscript scripts/07_fig_bivariate_retail.R 
 figures/fig_bivariate_retail.png: derived_data/plotting_data.csv scripts/util.R
-		Rscript scripts/07_fig_univariate.R 
+		Rscript scripts/07_fig_bivariate_retail.R 
 
 figures/fig_bivariate_api.pdf: derived_data/plotting_data.csv scripts/util.R
-		Rscript scripts/08_fig_univariate.R 
+		Rscript scripts/08_fig_bivariate_api.R 
 figures/fig_bivariate_api.png: derived_data/plotting_data.csv scripts/util.R
-		Rscript scripts/08_fig_univariate.R 
+		Rscript scripts/08_fig_bivariate_api.R 
 
 # Shiny setup
 shiny: scripts/shiny.R
