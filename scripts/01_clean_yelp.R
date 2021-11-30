@@ -6,13 +6,14 @@ library(jsonlite)
 library(data.table)
 library(tidyverse)
 library(tidygeocoder)
+library(tidycensus)
 library(usmap)
 library(here)
 library(fs)
 library(janitor)
 
 ## 2. Declare `here`
-here::i_am("scripts/cleanup.R")
+here::i_am("scripts/01_clean_yelp.R")
 
 ## 3. Run Util.R ----
 source(here::here("scripts", "util.R"))

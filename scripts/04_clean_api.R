@@ -4,13 +4,14 @@
 library(plyr)
 library(data.table)
 library(tidyverse)
+library(tidycensus)
 library(here)
 library(fs)
 library(janitor)
 library(labelled)
 
 ## 2. Declare `here`
-here::i_am("scripts/cleanup.R")
+here::i_am("scripts/04_clean_api.R")
 
 ## 3. Run Util.R ----
 source(here::here("scripts", "util.R"))

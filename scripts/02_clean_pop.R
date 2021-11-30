@@ -8,9 +8,10 @@ library(here)
 library(fs)
 library(janitor)
 library(labelled)
+library(tidycensus)
 
 ## 2. Declare `here`
-here::i_am("scripts/cleanup.R")
+here::i_am("scripts/02_clean_pop.R")
 
 ## 3. Run Util.R ----
 source(here::here("scripts", "util.R"))
