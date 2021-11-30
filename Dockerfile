@@ -47,4 +47,5 @@ RUN R -e "install.packages(\"janitor\")"
 RUN R -e "install.packages(\"tidycensus\")"
 RUN R -e "install.packages(\"labelled\")"
 RUN R -e "install.packages(\"ggthemes\")"
+RUN R -e "install.packages(\"cowplot\")"
 
