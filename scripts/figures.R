@@ -1,25 +1,25 @@
-# SETUP ----
-
-## 1. Load packages ----
-library(dplyr)
-library(here)
-library(ggExtra)
-library(maps)
-library(ggplot2)
-library(patchwork)
-library(viridis)
-library(cowplot)
-
-## 2. Run util.R ----
-source(here::here("scripts", "util.R"))
-
-ensure_directory(here::here("figures"))
-ensure_directory(here::here("figures", "bivariate"))
-ensure_directory(here::here("figures", "univariate"))
-
-## 3. Import plotting data ----
-plotting_df <-
-  readr::read_csv(here::here("derived_data", "plotting_data.csv"))
+# # SETUP ----
+# 
+# ## 1. Load packages ----
+# library(dplyr)
+# library(here)
+# library(ggExtra)
+# library(maps)
+# library(ggplot2)
+# library(patchwork)
+# library(viridis)
+# library(cowplot)
+# 
+# ## 2. Run util.R ----
+# source(here::here("scripts", "util.R"))
+# 
+# ensure_directory(here::here("figures"))
+# ensure_directory(here::here("figures", "bivariate"))
+# ensure_directory(here::here("figures", "univariate"))
+# 
+# ## 3. Import plotting data ----
+# plotting_df <-
+#   readr::read_csv(here::here("derived_data", "plotting_data.csv"))
 
 
 # A. BIVARIATE PLOTS (Main) ----
@@ -38,14 +38,12 @@ plotting_df <-
 ##  Figure 1
 ##  1. Outdoor recreation retail stores (per 1 million people) (x) vs Percent over 65 (y)
 ##  2. Outdoor recreation retail stores (per 1 million people (x) vs Percent in poverty (y)
-##  3. Outdoor recreation retail stores (per 1 million people) (x) vs GINI coefficent (y)
-##  4. Outdoor recreation retail stores (per 1 million people) (x) vs Percent non-white (y)
+##  3. Outdoor recreation retail stores (per 1 million people) (x) vs Percent non-white (y)
 ##
 ##  Figure 2
 ##  1. API index (x) vs Percent over 65 (y)
 ##  2. API index (x) vs Percent in poverty (y)
-##  3. API index (x) vs GINI coefficent (y)
-##  4. API index (x) vs Percent non-white (y)
+##  3. API index (x) vs Percent non-white (y)
 ##
 ## Thresholds will be defined by using (rounded) IQR as medium range.
 
@@ -78,24 +76,9 @@ p2 <- mega_plot_bivariate(
   y_label = "Households under\npoverty-line (%)"
 )
 
-### 1.3. vs GINI coefficent (y) ----
+### 1.3. vs Percent non-white (y) ----
 ### NOTE: Uses the gini version of labels and plot function
-p3 <- mega_gini_bivariate(
-  plotting_df = plotting_df,
-  return_data = TRUE,
-  x_var = p_business_permil,
-  x_high = return_rounded_iqr(plotting_df$p_business_permil)[2],
-  x_low = return_rounded_iqr(plotting_df$p_business_permil)[1],
-  x_label = "Outdoor recreation retail stores\n(per 1 million people)",
-  y_var = gini_coef,
-  y_high = return_gini_iqr(plotting_df$gini_coef)[2],
-  y_low = return_gini_iqr(plotting_df$gini_coef)[1],
-  y_label = "Gini coefficient"
-)
-
-### 1.4. vs Percent non-white (y) ----
-### NOTE: Uses the gini version of labels and plot function
-p4 <- mega_plot_bivariate(
+p3 <- mega_plot_bivariate(
   plotting_df = plotting_df,
   return_data = TRUE,
   x_var = p_business_permil,
@@ -110,7 +93,7 @@ p4 <- mega_plot_bivariate(
 
 ## 2. FIGURE 2 (API DATA) ----
 ### 2.1. vs Percent over 65 (y) ----
-p5 <- mega_plot_bivariate(
+p4 <- mega_plot_bivariate(
   plotting_df = plotting_df,
   return_data = TRUE,
   x_var = api_index,
@@ -124,7 +107,7 @@ p5 <- mega_plot_bivariate(
 )
 
 ### 2.2. vs Percent in poverty (y) ----
-p6 <- mega_plot_bivariate(
+p5 <- mega_plot_bivariate(
   plotting_df = plotting_df,
   return_data = TRUE,
   x_var = api_index,
@@ -137,24 +120,10 @@ p6 <- mega_plot_bivariate(
   y_label = "Households under\npoverty-line (%)"
 )
 
-### 2.3. vs GINI coefficent (y) ----
-### NOTE: Uses the gini version of labels and plot function
-p7 <- mega_gini_bivariate(
-  plotting_df = plotting_df,
-  return_data = TRUE,
-  x_var = api_index,
-  x_high = return_rounded_iqr(plotting_df$api_index)[2],
-  x_low = return_rounded_iqr(plotting_df$api_index)[1],
-  x_label = "API Score",
-  y_var = gini_coef,
-  y_high = return_gini_iqr(plotting_df$gini_coef)[2],
-  y_low = return_gini_iqr(plotting_df$gini_coef)[1],
-  y_label = "Gini coefficient"
-)
 
-### 2.4. vs Percent non-white (y) ----
+### 2.3. vs Percent non-white (y) ----
 ### NOTE: Uses the gini version of labels and plot function
-p8 <- mega_plot_bivariate(
+p6 <- mega_plot_bivariate(
   plotting_df = plotting_df,
   return_data = TRUE,
   x_var = api_index,
@@ -220,22 +189,6 @@ ggplot2::ggsave(
   height = 4,
   scale = 1.1
 )
-ggplot2::ggsave(
-  here::here("figures", "bivariate", "fig01-4.pdf"),
-  p4$plot,
-  device = grDevices::cairo_pdf,
-  width = 7,
-  height = 4,
-  scale = 1.1
-)
-ggplot2::ggsave(
-  here::here("figures", "bivariate", "fig01-4.jpg"),
-  p4$plot,
-  dpi = 300,
-  width = 7,
-  height = 4,
-  scale = 1.1
-)
 
 
 ### 2. Figure 1 stitched ----
@@ -246,12 +199,10 @@ p1_all <- cowplot::plot_grid(
   p2$map_only,
   p3$legend_only,
   p3$map_only,
-  p4$legend_only,
-  p4$map_only,
   ncol = 2,
   rel_widths = c(.5, 1),
-  labels = c("A", "", "B", "", "C", "", "D"),
-  scale = rep(c(.78, 1), 4)
+  labels = c("A", "", "B", "", "C"),
+  scale = rep(c(.78, 1), 3)
 )
 ggplot2::ggsave(
   here::here("figures", "bivariate", "fig01_retail.pdf"),
@@ -274,7 +225,7 @@ ggplot2::ggsave(
 ### 3. Figures 2 ----
 ggplot2::ggsave(
   here::here("figures", "bivariate", "fig02-1.pdf"),
-  p5$plot,
+  p4$plot,
   device = grDevices::cairo_pdf,
   width = 7,
   height = 4,
@@ -282,7 +233,7 @@ ggplot2::ggsave(
 )
 ggplot2::ggsave(
   here::here("figures", "bivariate", "fig02-1.jpg"),
-  p5$plot,
+  p4$plot,
   dpi = 300,
   width = 7,
   height = 4,
@@ -291,7 +242,7 @@ ggplot2::ggsave(
 
 ggplot2::ggsave(
   here::here("figures", "bivariate", "fig02-2.pdf"),
-  p6$plot,
+  p5$plot,
   device = grDevices::cairo_pdf,
   width = 7,
   height = 4,
@@ -299,7 +250,7 @@ ggplot2::ggsave(
 )
 ggplot2::ggsave(
   here::here("figures", "bivariate", "fig02-2.jpg"),
-  p6$plot,
+  p5$plot,
   dpi = 300,
   width = 7,
   height = 4,
@@ -308,7 +259,7 @@ ggplot2::ggsave(
 
 ggplot2::ggsave(
   here::here("figures", "bivariate", "fig02-3.pdf"),
-  p7$plot,
+  p6$plot,
   device = grDevices::cairo_pdf,
   width = 7,
   height = 4,
@@ -316,44 +267,27 @@ ggplot2::ggsave(
 )
 ggplot2::ggsave(
   here::here("figures", "bivariate", "fig02-3.jpg"),
-  p7$plot,
+  p6$plot,
   dpi = 300,
   width = 7,
   height = 4,
   scale = 1.1
 )
-ggplot2::ggsave(
-  here::here("figures", "bivariate", "fig02-4.pdf"),
-  p8$plot,
-  device = grDevices::cairo_pdf,
-  width = 7,
-  height = 4,
-  scale = 1.1
-)
-ggplot2::ggsave(
-  here::here("figures", "bivariate", "fig02-4.jpg"),
-  p8$plot,
-  dpi = 300,
-  width = 7,
-  height = 4,
-  scale = 1.1
-)
+
 
 
 ### 4. Figure 2 stitched ----
 p2_all <- cowplot::plot_grid(
+  p4$legend_only,
+  p4$map_only,
   p5$legend_only,
   p5$map_only,
   p6$legend_only,
   p6$map_only,
-  p7$legend_only,
-  p7$map_only,
-  p8$legend_only,
-  p8$map_only,
   ncol = 2,
   rel_widths = c(.5, 1),
   labels = c("A", "", "B", "", "C", "", "D"),
-  scale = rep(c(.78, 1), 4)
+  scale = rep(c(.78, 1), 3)
 )
 ggplot2::ggsave(
   here::here("figures", "bivariate", "fig02_api.pdf"),
