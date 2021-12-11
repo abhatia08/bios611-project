@@ -48,8 +48,6 @@ po/*~
 source_data/yelp_academic_dataset_business.json
 derived_data/*
 source_data/api_raw.json
-report.log
-report.aux
 source_data/pcen_v2018_y18.txt.zip
 source_data/__MACOSX
 source_data/AHRF_2018-2019
@@ -65,5 +63,13 @@ figures/*
 
 # bash history
 .bash_history
+
+# latex log files for report
+report.fdb_latexmk
+report.fls
+report.pdf
+report.synctex.gz
+report.log
+report.aux
 
 
