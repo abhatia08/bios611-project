@@ -99,7 +99,7 @@ make derived_data/ahrf_subset.csv
 make derived_data/plotting_data.csv
 ```
 ### 3. Make figures (univariate and bivariate plots)
-_Note: Each Make target creates multiple plots in the `/figures` directory that are finally stitched together to create a single figure (output in .pdf and .png format)_
+_Note: Each Make target creates multiple plots in the `/figures` directory that are finally stitched together to create a single figure (output in .pdf and .jpg format)_
 ```
 make figures/fig_univariate_all
 
