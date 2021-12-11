@@ -46,7 +46,8 @@ docker run \
 
 ##### Step 4. 
 
-Once the Rstudio is running connect to it by visiting localhost:8787 in your browser, and enter `rstudio` as the username, and `password123` as the password. 
+* Once the Rstudio is running connect to it by visiting [localhost:8787](http://localhost:8787/) in your browser 
+* Enter `rstudio` as the username, and `password123` as the password (or any other password you specified in step 3). 
 
 ---
 ## Shiny 
@@ -86,6 +87,7 @@ make clean
 ### 2. Clean source data and produce derived datasets.
   _Note: If you would like to run these scripts manually, instead of using the included Makefile, please follow the numerical order specified in the script name (starting with `01_clean_yelp.R`)_
 ```
+# Cleaning source data
 make derived_data/yelp_tidy.csv
 
 make derived_data/population_by_age.csv
@@ -96,13 +98,19 @@ make derived_data/ahrf_subset.csv
 
 make derived_data/ahrf_subset.csv
 
+# Dataset needed for analysis
 make derived_data/plotting_data.csv
 ```
 ### 3. Make figures (univariate and bivariate plots)
-_Note: Each Make target creates multiple plots in the `/figures` directory that are finally stitched together to create a single figure (output in .pdf and .jpg format)_
+_Note: Each Make target creates multiple plots in the `/figures` directory that are finally stitched together to create a single figure (output in .pdf and .png format)_
 ```
+# Create all figures
+make figures
+
+# Create all Univariate figures
 make figures/fig_univariate_all
 
+# Create all Bivariate figures
 make figures/fig_bivariate_retail
 
 make figures/fig_bivariate_api
@@ -116,7 +124,7 @@ make shiny
 ### 5. Make the final report 
 :construction: _Note: For this project, the intended primary output was the shiny dashboard. However, the final report includes the proposal that laid out the objectives for this analysis. Subsequent versions may include additional analysis_ :construction:
 ```
-make report.pdf
+make report
 ```
 
 ---

@@ -94,7 +94,7 @@ ggplot2::ggsave(
   scale = 1.1
 )
 ggplot2::ggsave(
-  here::here("figures", "bivariate", "figB01.jpg"),
+  here::here("figures", "bivariate", "figB01.png"),
   p1$plot,
   dpi = 300,
   width = 7,
@@ -111,7 +111,7 @@ ggplot2::ggsave(
   scale = 1.1
 )
 ggplot2::ggsave(
-  here::here("figures", "bivariate", "figB02.jpg"),
+  here::here("figures", "bivariate", "figB02.png"),
   p2$plot,
   dpi = 300,
   width = 7,
@@ -128,7 +128,7 @@ ggplot2::ggsave(
   scale = 1.1
 )
 ggplot2::ggsave(
-  here::here("figures", "bivariate", "figB03.jpg"),
+  here::here("figures", "bivariate", "figB03.png"),
   p3$plot,
   dpi = 300,
   width = 7,
@@ -158,7 +158,7 @@ ggplot2::ggsave(
   scale = 1.2
 )
 ggplot2::ggsave(
-  here::here("figures", "bivariate", "fig_bivariate_retail.jpg"),
+  here::here("figures", "bivariate", "fig_bivariate_retail.png"),
   p1_all,
   dpi = 300,
   width = 6,

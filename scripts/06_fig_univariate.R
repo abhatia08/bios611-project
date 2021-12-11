@@ -46,7 +46,7 @@ ggplot2::ggsave(
   scale = 1.1
 )
 ggplot2::ggsave(
-  here::here("figures", "univariate", "figU01_p_65yo.jpg"),
+  here::here("figures", "univariate", "figU01_p_65yo.png"),
   p1,
   dpi = 300,
   width = 7,
@@ -76,7 +76,7 @@ ggplot2::ggsave(
   scale = 1.1
 )
 ggplot2::ggsave(
-  here::here("figures", "univariate", "figU02_poverty.jpg"),
+  here::here("figures", "univariate", "figU02_poverty.png"),
   p2,
   dpi = 300,
   width = 7,
@@ -105,7 +105,7 @@ ggplot2::ggsave(
   scale = 1.1
 )
 ggplot2::ggsave(
-  here::here("figures", "univariate", "figU03_p_nonwhite_nonhispanic.jpg"),
+  here::here("figures", "univariate", "figU03_p_nonwhite_nonhispanic.png"),
   p3,
   dpi = 300,
   width = 7,
@@ -137,7 +137,7 @@ ggplot2::ggsave(
   scale = 1.1
 )
 ggplot2::ggsave(
-  here::here("figures", "univariate", "figU04_population.jpg"),
+  here::here("figures", "univariate", "figU04_population.png"),
   p4,
   dpi = 300,
   width = 7,
@@ -168,7 +168,7 @@ ggplot2::ggsave(
   scale = 1.1
 )
 ggplot2::ggsave(
-  here::here("figures", "univariate", "figU05_api.jpg"),
+  here::here("figures", "univariate", "figU05_api.png"),
   p5,
   dpi = 300,
   width = 7,
@@ -199,7 +199,7 @@ ggplot2::ggsave(
   scale = 1.1
 )
 ggplot2::ggsave(
-  here::here("figures", "univariate", "figU06_n_businesses_permil.jpg"),
+  here::here("figures", "univariate", "figU06_n_businesses_permil.png"),
   p6,
   dpi = 300,
   width = 7,
@@ -230,7 +230,7 @@ ggplot2::ggsave(
   scale = 1.2
 )
 ggplot2::ggsave(
-  here::here("figures", "univariate", "fig_univariate_all.jpg"),
+  here::here("figures", "univariate", "fig_univariate_all.png"),
   u_all,
   dpi = 300,
   width = 6,
