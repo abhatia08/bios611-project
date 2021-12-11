@@ -70,7 +70,6 @@ p2 <- mega_plot_bivariate(
 )
 
 ### 1.3. vs Percent non-white (y) ----
-### NOTE: Uses the gini version of labels and plot function
 p3 <- mega_plot_bivariate(
   plotting_df = plotting_df,
   return_data = TRUE,
@@ -167,3 +166,25 @@ ggplot2::ggsave(
   scale = 1.2
 )
 
+
+# TEST SCATTERPLOT ----
+
+ggExtra::ggMarginal(
+  ggplot(
+    data = left_join(plotting_df(),
+                     p1()$data %>%
+                       select(fips, color_hex)),
+    aes(
+      x = !!rlang::sym(input$riskfactor1),
+      y = !!rlang::sym(input$riskfactor2),
+      color = color_hex
+    )
+  ) + geom_point(alpha = .9, size = 2) +
+    scale_color_identity() +
+    mk_nytimes() +
+    scale_x_continuous(return_label(input$riskfactor1),
+                       trans = input$rf1transform) +
+    scale_y_continuous(return_label(input$riskfactor2),
+                       trans = input$rf2transform),
+  "density"
+)
