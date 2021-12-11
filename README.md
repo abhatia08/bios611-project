@@ -108,13 +108,13 @@ make figures/fig_bivariate_retail
 make figures/fig_bivariate_api
 ```
 ### 4. Make the shiny visualization (primary output for this project)
-:construction: _Note: This was more useful for the purposes of the project compared to a static report, and was a more interesting way to display and interact with the data. This dashboard will be hopefully maintained beyond the scope of the class, and the code and source data will evolve over time accordingly._ :construction:
+_Note: This was more useful for the purposes of the project compared to a static report, and was a more interesting way to display and interact with the data. This dashboard will be hopefully maintained beyond the scope of the class, and the code and source data will evolve over time accordingly._
 ```
 make shiny
 ```
 
 ### 5. Make the final report 
-:construction: _Note: For this project, the intended primary output was the shiny dashboard. However, the final report includes the proposal that laid out the objectives for this analysis_ :construction:
+:construction: _Note: For this project, the intended primary output was the shiny dashboard. However, the final report includes the proposal that laid out the objectives for this analysis. Subsequent versions may include additional analysis_ :construction:
 ```
 make report.pdf
 ```
