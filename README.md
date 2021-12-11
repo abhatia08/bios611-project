@@ -2,6 +2,7 @@
 
 This repository contains data and scripts used for the final project of [BIOS 611- Principles of Data Science](https://github.com/Vincent-Toups/datasci611), at the University of North Carolina at Chapel Hill  
 
+![](https://user-images.githubusercontent.com/17418954/145687283-d785cdfb-6b13-4e63-a6a3-e04b08a56112.jpg)
 
 ### Abstract
 The term “Nature Gap” sheds light on the racial and economic disparities in access to greenspace, unequal distribution of nature, and the unjust experience of people of color in the outdoors across the United States. Systematic practices such as economic segregation, redlining, forced migration, racial violence, and intimidation in the outdoors have been prevalent for decades, have perpetuated the racial divide. Contemporary examples during the pandemic of Christian Cooper “Birding While Black” in Central Park, and Ahmaud Arbery murdered while jogging down a boulevard in Georgia show the risk and difficulty endured by people of color while in outdoor spaces.  
@@ -32,7 +33,7 @@ docker build . -t abhi08
 ##### Step 3
 
 To start RStudio, enter the following command:
-
+_Note: You may subtitute  `password123` for any password you prefer, and use that password in Step 4_
 ```
 docker run \
     -p 8787:8787 \
@@ -41,6 +42,9 @@ docker run \
     -v "$(pwd)":/home/rstudio \
     -it abhi08
 ```
+:warning: _The above code was written for a Windows machine. Powershell users may need to substitute `$(pwd)` with `${pwd}` instead._
+
+##### Step 4. 
 
 Once the Rstudio is running connect to it by visiting localhost:8787 in your browser, and enter `rstudio` as the username, and `password123` as the password. 
 
@@ -65,10 +69,12 @@ docker run \
 2. Navigating to the terminal within RStudio and typing the following:
   
 ``` 
-cd scripts; Rscript 99_shiny.R
+make shiny
 ```
 And it should be accessible on [localhost:8080](http://localhost:8080/) on your browser
 
+
+---
 ## Makefile
 
 To use the [`Makefile`](Makefile) included in this repository to build components of the project, run the following code in the terminal within RStudio.
