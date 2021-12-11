@@ -1,6 +1,7 @@
 \documentclass{article}
 \usepackage{graphicx}
 \usepackage[margin=0.75in]{geometry}
+\usepackage{placeins}
 
 \begin{document}
 
@@ -20,16 +21,16 @@ Access to public open spaces provides communities with the opportunity to engage
 \section{\textbf{Data Sources}}
 \subsection{Population demographics:}
 \begin{itemize}
-\item Population per square mile of landmass (Source: U.S. Census Bureau)
+\item Population as of 2018 (Source: U.S. Census Bureau)
 \item Percentage of residents living under the federal poverty level (Source: U.S. Census Bureau)
-\item Percentage of population 70 years or older (Source: National Center for Health Statistics Bridged Race Population Estimates 2011)
+\item Percentage of population 65 years or older (Source: National Center for Health Statistics Bridged Race Population Estimates 2011)
 \item Proportion of population that is not non-Hispanic White as determined by American Community Survey data (Source: U.S. Census Bureau)
 \end{itemize}
 
 
-\subsection{ \textbf{Commercial recreation services (as a proxy for community recreation expenditure):}}
+\subsection{\textbf{Commercial recreation services (as a proxy for community recreation expenditure):}}
 \begin{itemize}
-\item Number of outdoor gear stores at the county-level (Source: Yelp Business Dataset including location data, attributes, and categories)
+\item Number of outdoor gear stores per million individuals at the county-level (Source: Yelp Business Dataset including location data, attributes, and categories)
 \end{itemize}
 
 
@@ -37,8 +38,139 @@ Access to public open spaces provides communities with the opportunity to engage
 \begin{itemize}
 \item Proportion of individuals that live within a half-mile of a park boundary at the county-level (Source: CDC National Environmental Public Health Tracking Network (NEPHTN) Access to Parks Indicator (API))
 \end{itemize}
+\FloatBarrier
 
 \section{\textbf{Statistical Analysis}}
+\subsection{\textbf{Methods}}
+For this analysis, we aggregated all measures to the county-level. We purposefully avoid weighting these factors relative to each other since there is no strong evidence to rigorously assign importance across categories. The analysis includes univariate maps to depict spatial heterogeneity across counties of the United States, as well as bivariate county-level maps to summarize relationships across categories. 
 
-For this analysis, we will aggregate all measures to the county-level, and exclude non-residential (no population) census tracts, and those with other missing key indicators. Additionally, we will exclude Alaska and Hawaii from the analyses due to their unique landscapes introducing difficulty in comparing measures of spatial access to parks and green spaces to the continental USA. We will purposefully avoid weighting these factors relative to each other since there is no strong evidence to rigorously assign importance across categories. The analysis will include univariate maps to depict spatial heterogeneity across counties of the United States, as well as bivariate county-level maps to summarize relationships across categories. 
+\subsection{\textbf{Univariate Results}}
+\begin{figure}[!h] 
+    \centering
+    \includegraphics[width=11cm]{figures/univariate/fig_univariate_all.jpg}
+    \caption{(A) Percentage of population 65 years or older, 2018 (Source: National Center for Health Statistics Bridged Race Population Estimates 2018, Vintage 2018). (B) Percentage of households living in poverty, 2016 (Source: CDC Atlas via the Census Small Area Income and Policy Estimates). (C) Percentage of population non-Hispanic and non-white, 2018 (Source: National Center for Health Statistics). (D) Population as of 2018 (Source: U.S. Census Bureau) (E) Proportion of individuals that live within a half-mile of a park boundary at the county-level (Source: CDC National Environmental Public Health Tracking Network (NEPHTN) Access to Parks Indicator (API). (F) Number of outdoor gear stores per million individuals at the county-level (Source: Yelp Business Dataset including location data, attributes, and categories))}
+    \
+\end{figure}
+\FloatBarrier
+
+
+\subsection{\textbf{Bivariate Results- Access to Parks}}
+\begin{figure}[!h] 
+    \centering
+    \includegraphics[width=15cm]{figures/bivariate/fig_bivariate_api.jpg}
+    \caption{Access to Parks indicator score (Source: CDC National Environmental Public Health Tracking Network (NEPHTN)) and: (A) Percentage of population 65 years or older, 2018 (Source: National Center for Health Statistics Bridged Race Population Estimates 2018, Vintage 2018). (B) Percentage of households living in poverty, 2016 (Source: CDC Atlas via the Census Small Area Income and Policy Estimates). (C) Percentage of population non-Hispanic and non-white, 2018 (Source: National Center for Health Statistics)}
+    \
+\end{figure}
+\FloatBarrier
+
+\subsection{\textbf{Bivariate Results- Access to retail}}
+\begin{figure}[!h] 
+    \centering
+    \includegraphics[width=15cm]{figures/bivariate/fig_bivariate_retail.jpg}
+    \caption{Number of outdoor gear stores per million individuals at the county-level (Source: Yelp Business Dataset including location data, attributes, and categories)and: (A) Percentage of population 65 years or older, 2018 (Source: National Center for Health Statistics Bridged Race Population Estimates 2018, Vintage 2018). (B) Percentage of households living in poverty, 2016 (Source: CDC Atlas via the Census Small Area Income and Policy Estimates). (C) Percentage of population non-Hispanic and non-white, 2018 (Source: National Center for Health Statistics).}
+    \
+\end{figure}
+\FloatBarrier
+
+\section{Supplemental Figures}
+\subsection{\textbf{Univariate Figures}}
+\begin{figure}[!h] 
+    \centering
+    \caption{Percentage of population 65 years or older, 2018 (Source: National Center for Health Statistics Bridged Race Population Estimates 2018, Vintage 2018).}
+    \includegraphics[width=11cm]{figures/univariate/figU01_p_65yo.jpg}
+    \
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!h] 
+    \centering
+    \caption{Percentage of households living in poverty, 2016 (Source: CDC Atlas via the Census Small Area Income and Policy Estimates).}
+    \includegraphics[width=11cm]{figures/univariate/figU02_poverty.jpg}
+    \
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!h] 
+    \centering
+    \caption{Percentage of population non-Hispanic and non-white, 2018 (Source: National Center for Health Statistics).}
+    \includegraphics[width=11cm]{figures/univariate/figU03_p_nonwhite_nonhispanic.jpg}
+    \
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!h] 
+    \centering
+    \caption{Population as of 2018 (Source: U.S. Census Bureau)}
+    \includegraphics[width=11cm]{figures/univariate/figU04_population.jpg}
+    \
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!h] 
+    \centering
+    \caption{Proportion of individuals that live within a half-mile of a park boundary at the county-level (Source: CDC National Environmental Public Health Tracking Network (NEPHTN) Access to Parks Indicator (API)).}
+    \includegraphics[width=11cm]{figures/univariate/figU05_api.jpg}
+    \
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!h] 
+    \centering
+    \caption{Number of outdoor gear stores per million individuals at the county-level (Source: Yelp Business Dataset including location data, attributes, and categories).}
+    \includegraphics[width=11cm]{figures/univariate/figU06_n_businesses_permil.jpg}
+    \
+\end{figure}
+\FloatBarrier
+
+\newpage
+\subsection{\textbf{Bivariate Figures}}
+\begin{figure}[!h] 
+    \centering
+    \caption{Number of outdoor gear stores per million individuals at the county-level (Source: Yelp Business Dataset including location data, attributes, and categories) and Percentage of population 65 years or older, 2018 (Source: National Center for Health Statistics Bridged Race Population Estimates 2018, Vintage 2018). }
+    \includegraphics[width=16cm]{figures/bivariate/figB01.jpg}
+    \
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!h] 
+    \centering
+    \caption{Number of outdoor gear stores per million individuals at the county-level (Source: Yelp Business Dataset including location data, attributes, and categories) and Percentage of households living in poverty, 2016 (Source: CDC Atlas via the Census Small Area Income and Policy Estimates).}
+    \includegraphics[width=16cm]{figures/bivariate/figB02.jpg}
+    \
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!h] 
+    \centering
+    \caption{Number of outdoor gear stores per million individuals at the county-level (Source: Yelp Business Dataset including location data, attributes, and categories) and Percentage of population non-Hispanic and non-white, 2018 (Source: National Center for Health Statistics).}
+    \includegraphics[width=16cm]{figures/bivariate/figB03.jpg}
+    \
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!h] 
+    \centering
+    \caption{Proportion of individuals that live within a half-mile of a park boundary at the county-level (Source: CDC National Environmental Public Health Tracking Network (NEPHTN) Access to Parks Indicator (API)) and Percentage of population 65 years or older, 2018 (Source: National Center for Health Statistics Bridged Race Population Estimates 2018, Vintage 2018). }
+    \includegraphics[width=16cm]{figures/bivariate/figB04.jpg}
+    \
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!h] 
+    \centering
+    \caption{Proportion of individuals that live within a half-mile of a park boundary at the county-level (Source: CDC National Environmental Public Health Tracking Network (NEPHTN) Access to Parks Indicator (API)) and Percentage of households living in poverty, 2016 (Source: CDC Atlas via the Census Small Area Income and Policy Estimates).}
+    \includegraphics[width=16cm]{figures/bivariate/figB05.jpg}
+    \
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!h] 
+    \centering
+    \caption{Proportion of individuals that live within a half-mile of a park boundary at the county-level (Source: CDC National Environmental Public Health Tracking Network (NEPHTN) Access to Parks Indicator (API)) and Percentage of population non-Hispanic and non-white, 2018 (Source: National Center for Health Statistics).}
+    \includegraphics[width=16cm]{figures/bivariate/figB06.jpg}
+    \
+\end{figure}
+\FloatBarrier
+
+
 \end{document}
