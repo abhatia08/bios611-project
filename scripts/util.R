@@ -5,6 +5,9 @@ library(tidyverse)
 library(viridis)
 library(ggthemes)
 library(sf)
+library(rlang)
+
+
 # sf::sf_use_s2(FALSE)
 
 # ENSURE DIRECTORY ----
@@ -53,26 +56,15 @@ gen_color_legend <- function(rev_x = FALSE, rev_y = FALSE) {
     dplyr::as_tibble() %>%
     dplyr::mutate(
       color_hex = c(
-        "#e8e6f2",
-        "#b5d3e7",
-        "#4fadd0",
-        "#e5b4d9",
-        "#b8b3d8",
-        "#3983bb",
-        "#d34fa6",
-        "#b03598",
-        "#2a1a8a"
-      ),
-      color_hex_a = c(
         "#e8e8e8",
-        "#e4acac",
-        "#c85a5a",
-        "#b0d5df",
-        "#ad9ea5",
-        "#985356",
-        "#64acbe",
-        "#627f8c",
-        "#574249"
+        "#b8d6be",
+        "#73ae80",
+        "#b5c0da",
+        "#90b2b3",
+        "#5a9178",
+        "#6c83b5",
+        "#567994",
+        "#2a5a5b"
       )
     )
   
@@ -216,6 +208,166 @@ return_rounded_iqr <- function(x) {
   round(quantile(x, c(.25, .75), na.rm = TRUE, names = FALSE))
 }
 
+
+return_dict <- function() {
+  list(
+    "p65older" = list(
+      low = 15,
+      high = 25,
+      reverse = FALSE,
+      label = "% population\nover 65 years old",
+      min = 0,
+      max = 60,
+      step = 1,
+      transform = "log1p"
+    ),
+    "p_poverty" = list(
+      low = 10,
+      high = 20,
+      reverse = FALSE,
+      label = "% households\nin poverty",
+      min = 0,
+      max = 40,
+      step = 1,
+      transform = "log1p"
+    ),
+    "p_nonwhite" = list(
+      low = 10,
+      high = 35,
+      reverse = FALSE,
+      label = "% of the population\nnon-Hispanic and non-White",
+      min = 0,
+      max = 100,
+      step = 1,
+      transform = "log1p"
+    ),
+    "api_index" = list(
+      low = 10,
+      high = 40,
+      reverse = FALSE,
+      label = "access to parks index (API)",
+      min = 0,
+      max = 100,
+      step = 1,
+      transform = "log1p"
+    ),
+    "p_business_permil" = list(
+      low = 15,
+      high = 100,
+      reverse = FALSE,
+      label = "number of outdoor recreation stores per million people",
+      min = 0,
+      max = 290,
+      step = 1,
+      transform = "identity"
+    ),
+    "n_pop_2018" = list(
+      low = 10942,
+      high = 67913,
+      reverse = FALSE,
+      label = "number of outdoor recreation stores per million people",
+      min = 88,
+      max = 10200000,
+      step = 1,
+      transform = "log10"
+    )
+  )
+}
+
+return_low <- function(x) {
+  return_dict()[[x]]$low
+}
+
+return_high <- function(x) {
+  return_dict()[[x]]$high
+}
+
+return_label <- function(x) {
+  return_dict()[[x]]$label
+}
+
+return_reverse <- function(x) {
+  return_dict()[[x]]$reverse
+}
+
+return_min <- function(x) {
+  return_dict()[[x]]$min
+}
+
+return_max <- function(x) {
+  return_dict()[[x]]$max
+}
+
+return_step <- function(x) {
+  return_dict()[[x]]$step
+}
+
+return_transform <- function(x) {
+  return_dict()[[x]]$transform
+}
+
+return_nonNA <- function(plotting_df, col_x) {
+  sum(!is.na(plotting_df[[col_x]]))
+}
+
+return_median_val <- function(plotting_df, col_x) {
+  sprintf("%0.2f", stats::median(plotting_df[[col_x]], na.rm = TRUE))
+}
+
+return_middle_N <- function(plotting_df, col_x, range_x) {
+  sum(dplyr::between(plotting_df[[col_x]], range_x[1], range_x[2]), na.rm = TRUE)
+}
+
+return_lower_counties <- function(plotting_df, col_x, range_x) {
+  sum(plotting_df[[col_x]] < range_x[1], na.rm = TRUE)
+}
+
+return_upper_counties <- function(plotting_df, col_x, range_x) {
+  sum(plotting_df[[col_x]] > range_x[2], na.rm = TRUE)
+}
+
+
+generate_county_text <- function(plotting_df, county_x, rf1, rf2) {
+  sub_df <- plotting_df %>%
+    dplyr::filter(fips == sprintf("%05i", as.integer(county_x)))
+  
+  COUNTY_NAME <-
+    sprintf("%s, %s", sub_df$county, sub_df$name, sub_df$abbrev)
+  POP <- sub_df$n_pop_2018
+  RISKFACTOR1 <- gsub("\n", " ", return_label(rf1))
+  rf1_val <- sub_df[[rf1]]
+  HIGHER_COUNTIES1 <-
+    sum(plotting_df[[rf1]] < rf1_val, na.rm = TRUE)
+  LOWER_COUNTIES1 <-
+    sum(plotting_df[[rf1]] > rf1_val, na.rm = TRUE)
+  RISKFACTOR2 <- gsub("\n", " ", return_label(rf2))
+  rf2_val <- sub_df[[rf2]]
+  HIGHER_COUNTIES2 <-
+    sum(plotting_df[[rf2]] < rf2_val, na.rm = TRUE)
+  LOWER_COUNTIES2 <-
+    sum(plotting_df[[rf2]] > rf2_val, na.rm = TRUE)
+  
+  glue::glue(
+    "<b>{COUNTY_NAME}</b> has a population of about <b>{POP}</b> (2018). ",
+    "For <b>{RISKFACTOR1}</b>, it has a value of <b>{RF1_VAL}</b>, which is ",
+    "higher than <b>{HIGHER_COUNTIES1}</b> counties and lower ",
+    "than <b>{LOWER_COUNTIES1}</b> counties. For <b>{RISKFACTOR2}</b>, it has a value ",
+    "of <b>{RF2_VAL}</b>, which is higher than <b>{HIGHER_COUNTIES2}</b> counties ",
+    "and lower than <b>{LOWER_COUNTIES2}</b> counties.<p><p>",
+    COUNTY_NAME = COUNTY_NAME,
+    POP = POP,
+    RISKFACTOR1 = RISKFACTOR1,
+    RF1_VAL =  sprintf("%0.2f", rf1_val),
+    HIGHER_COUNTIES1 = HIGHER_COUNTIES1,
+    LOWER_COUNTIES1 = LOWER_COUNTIES1,
+    RISKFACTOR2 = RISKFACTOR2,
+    RF2_VAL = sprintf("%0.2f", rf2_val),
+    HIGHER_COUNTIES2 = HIGHER_COUNTIES2,
+    LOWER_COUNTIES2 = LOWER_COUNTIES2
+  )
+}
+
+
 mega_plot_bivariate <-
   function(plotting_df,
            x_var,
@@ -335,7 +487,7 @@ mk_nytimes <- function(...) {
   c_mtext <- "grey30"
   
   # Begin construction of chart
-  theme_bw(base_size = 12, base_family = "Arial Narrow") +
+  theme_bw(base_size = 12, base_family = "") +
     
     # Region
     theme(
