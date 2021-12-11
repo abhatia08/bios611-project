@@ -65,5 +65,5 @@ figures/fig_bivariate_api.png: derived_data/plotting_data.csv scripts/util.R
 		Rscript scripts/08_fig_bivariate_api.R 
 
 # Shiny setup
-shiny: scripts/shiny.R
+shiny: derived_data/plotting_data.csv scripts/util.R
 	Rscript scripts/99_shiny.R ${PORT}
