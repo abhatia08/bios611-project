@@ -69,7 +69,7 @@ p2 <- plot_counties(plotting_df, "p_poverty") +
   ggplot2::theme(legend.position = "bottom")
 ggplot2::ggsave(
   here::here("figures", "univariate", "figU02_poverty.pdf"),
-  p1,
+  p2,
   device = grDevices::cairo_pdf,
   width = 7,
   height = 6,
@@ -77,7 +77,7 @@ ggplot2::ggsave(
 )
 ggplot2::ggsave(
   here::here("figures", "univariate", "figU02_poverty.jpg"),
-  p1,
+  p2,
   dpi = 300,
   width = 7,
   height = 6,
@@ -98,7 +98,7 @@ p3 <- plot_counties(plotting_df, "p_nonwhite") +
   ggplot2::theme(legend.position = "bottom")
 ggplot2::ggsave(
   here::here("figures", "univariate", "figU03_p_nonwhite_nonhispanic.pdf"),
-  p1,
+  p3,
   device = grDevices::cairo_pdf,
   width = 7,
   height = 6,
@@ -106,7 +106,7 @@ ggplot2::ggsave(
 )
 ggplot2::ggsave(
   here::here("figures", "univariate", "figU03_p_nonwhite_nonhispanic.jpg"),
-  p1,
+  p3,
   dpi = 300,
   width = 7,
   height = 6,
@@ -130,7 +130,7 @@ p4 <- plot_counties(plotting_df, "n_pop_2018") +
   ggplot2::theme(legend.position = "bottom")
 ggplot2::ggsave(
   here::here("figures", "univariate", "figU04_population.pdf"),
-  p1,
+  p4,
   device = grDevices::cairo_pdf,
   width = 7,
   height = 6,
@@ -138,7 +138,7 @@ ggplot2::ggsave(
 )
 ggplot2::ggsave(
   here::here("figures", "univariate", "figU04_population.jpg"),
-  p1,
+  p4,
   dpi = 300,
   width = 7,
   height = 6,
@@ -151,7 +151,7 @@ p5 <- plot_counties(plotting_df, "api_index") +
     "Access to Park Index",
     direction = -1,
     trans = "log1p",
-    na.value = "grey50",
+    na.value = "grey92",
     guide = ggplot2::guide_colorbar(
       title.position = "top",
       barheight = ggplot2::unit(.5, "cm"),
@@ -161,7 +161,7 @@ p5 <- plot_counties(plotting_df, "api_index") +
   ggplot2::theme(legend.position = "bottom")
 ggplot2::ggsave(
   here::here("figures", "univariate", "figU05_api.pdf"),
-  p1,
+  p5,
   device = grDevices::cairo_pdf,
   width = 7,
   height = 6,
@@ -169,7 +169,7 @@ ggplot2::ggsave(
 )
 ggplot2::ggsave(
   here::here("figures", "univariate", "figU05_api.jpg"),
-  p1,
+  p5,
   dpi = 300,
   width = 7,
   height = 6,
@@ -182,7 +182,7 @@ p6 <- plot_counties(plotting_df, "p_business_permil") +
     "Outdoor recreation retail stores (per 1 million people)",
     direction = -1,
     trans = "log1p",
-    na.value = "grey50",
+    na.value = "grey92",
     guide = ggplot2::guide_colorbar(
       title.position = "top",
       barheight = ggplot2::unit(.5, "cm"),
@@ -192,7 +192,7 @@ p6 <- plot_counties(plotting_df, "p_business_permil") +
   ggplot2::theme(legend.position = "bottom")
 ggplot2::ggsave(
   here::here("figures", "univariate", "figU06_n_businesses_permil.pdf"),
-  p1,
+  p6,
   device = grDevices::cairo_pdf,
   width = 7,
   height = 6,
@@ -200,7 +200,7 @@ ggplot2::ggsave(
 )
 ggplot2::ggsave(
   here::here("figures", "univariate", "figU06_n_businesses_permil.jpg"),
-  p1,
+  p6,
   dpi = 300,
   width = 7,
   height = 6,
