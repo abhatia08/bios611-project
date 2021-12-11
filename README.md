@@ -46,9 +46,9 @@ docker run \
 Once the Rstudio is running connect to it by visiting localhost:8787 in your browser, and enter `rstudio` as the username, and `password123` as the password. 
 
 ---
-## Shiny (Homework 10)
+## Shiny 
 
-To explore preliminary county-level data in the dataset, start the R shiny app using one of the two methods:
+Start the R shiny app associated with this project using one of the two methods:
 
 1. From the command line:
 
@@ -59,47 +59,60 @@ docker run \
     -e PASSWORD=password123 \
     -v "$(pwd)":/home/rstudio \
     -it abhi08 sudo -H -u rstudio\
-    /bin/bash -c "cd ~/scripts; Rscript shiny.R"
+    /bin/bash -c "cd ~/scripts; Rscript 99_shiny.R"
 ```
 *OR*
 
 2. Navigating to the terminal within RStudio and typing the following:
   
 ``` 
-cd scripts; Rscript shiny.R
+cd scripts; Rscript 99_shiny.R
 ```
 And it should be accessible on [localhost:8080](http://localhost:8080/) on your browser
 
 ## Makefile
 
-To use the `Makefile` included in this repository to build components of the project, run the following code in the terminal within RStudio.
+To use the [`Makefile`](Makefile) included in this repository to build components of the project, run the following code in the terminal within RStudio.
 
-* Clean all derived data and restart (initial step)
+### 1.  Clean all derived data, figures, and restart (initial step)
 ```
 make clean
 ```
-* Clean source data and produced derived datasets
-:construction: _Note: The current `cleanup.R` script is written to process all source data together. Subsequent versions may vary, allowing users to clean and produce individual datasets used in the analysis_ :construction:
+### 2. Clean source data and produce derived datasets.
+  _Note: If you would like to run these scripts manually, instead of using the included Makefile, please follow the numerical order specified in the script name (starting with `01_clean_yelp.R`)_
 ```
 make derived_data/yelp_tidy.csv
 
-make derived_data/ahrf_subset.csv
+make derived_data/population_by_age.csv
 
 make derived_data/percent_nonwhite_pop.csv
 
-make derived_data/population_by_age.csv
-```
+make derived_data/ahrf_subset.csv
 
-* Make the final report
-```
-make report.pdf
-```
+make derived_data/ahrf_subset.csv
 
-* Make the shiny visualization (current version from HW10)
+make derived_data/plotting_data.csv
+```
+### 3. Make figures (univariate and bivariate plots)
+_Note: Each Make target creates multiple plots in the `/figures` directory that are finally stitched together to create a single figure (output in .pdf and .png format)_
+```
+make figures/fig_univariate_all
+
+make figures/fig_bivariate_retail
+
+make figures/fig_bivariate_api
+```
+### 4. Make the shiny visualization (primary output for this project)
+:construction: _Note: This was more useful for the purposes of the project compared to a static report, and was a more interesting way to display and interact with the data. This dashboard will be hopefully maintained beyond the scope of the class, and the code and source data will evolve over time accordingly._ :construction:
 ```
 make shiny
 ```
 
+### 5. Make the final report 
+:construction: _Note: For this project, the intended primary output was the shiny dashboard. However, the final report includes the proposal that laid out the objectives for this analysis_ :construction:
+```
+make report.pdf
+```
 
 ---
 ### Issues 
