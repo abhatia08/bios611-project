@@ -10,9 +10,8 @@ Access to public open spaces provides communities with the opportunity to engage
 
 ---
 ## Project structure 
-:construction: *The structure of this project will change considerably over time* :construction:
 
-  - `./scripts/` contains all the scripts needed to reproduce the analysis. 
+  - `./scripts/` contains all the scripts needed to reproduce the analysis. The scripts are intended to be run in order of their number.
   - `./source_data/` contains publicly-available data used in the analytic pipeline.
   - `./derived_data/` contains all processed data that results from our `./scripts/` pipeline.
 ---
