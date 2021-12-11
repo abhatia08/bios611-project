@@ -174,3 +174,69 @@ ggplot2::ggsave(
 )
 
 
+# TEST SCATTERPLOT ----
+
+
+sp4 <- ggExtra::ggMarginal(
+  ggplot(
+    data = left_join(plotting_df,
+                     p4$data %>%
+                       select(fips, color_hex)),
+    aes(
+      x = p4$api_index,
+      y = p4$p65older,
+      color = p4$color_hex
+    )
+  ) + geom_point(alpha = .9, size = 2) +
+    scale_color_identity() +
+    # mk_nytimes() +
+    scale_x_continuous(return_label(p4$api_index),
+                       trans = identity) +
+    scale_y_continuous(return_label(p4$p65older),
+                       trans = identity),
+  "density"
+)
+
+ggExtra::ggMarginal(
+  ggplot(
+    data = left_join(plotting_df(),
+                     p1()$data %>%
+                       select(fips, color_hex)),
+    aes(
+      x = !!rlang::sym(input$riskfactor1),
+      y = !!rlang::sym(input$riskfactor2),
+      color = color_hex
+    )
+  ) + geom_point(alpha = .9, size = 2) +
+    scale_color_identity() +
+    mk_nytimes() +
+    scale_x_continuous(return_label(input$riskfactor1),
+                       trans = input$rf1transform) +
+    scale_y_continuous(return_label(input$riskfactor2),
+                       trans = input$rf2transform),
+  "density"
+)
+
+### ----
+p4scatter <- left_join(plotting_df,
+                       p4$data %>%
+                         select(fips, color_hex))
+
+# PRIMARY PLOT
+ggExtra::ggMarginal(
+  ggplot(p4scatter) +
+    aes(x = api_index, y = p65older, colour = color_hex) +
+    geom_point(
+      shape = "circle",
+      size = 1.5,
+      alpha = 0.5
+    ) +
+    scale_color_hue(direction = 1) +
+    mk_nytimes() +
+    scale_x_continuous(p4scatter$api_index,
+                       trans = "identity") +
+    scale_y_continuous(p4scatter$p65older,
+                       trans = "log1p") + theme(legend.position = "none") +
+    labs(x = "Access to Parks Indicator", y = "% Population over 65"),
+  "density"
+)
